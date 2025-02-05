@@ -41,13 +41,27 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
         var space = " "
         space = space.repeat(41 - tasks[position].tag.length - tasks[position].name.length)
         holder.taskName.text = tasks[position].name
+        if(tasks[position].note != ""){
+            holder.taskName.text = tasks[position].name + " (!)"
+        }
         holder.taskTag.text = tasks[position].tag
         holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
 
         if (tasks[position].importance == true){
             val drawable = GradientDrawable()
-            drawable.cornerRadius = 46f // Установите радиус закругления
+            drawable.cornerRadius = 46f
             drawable.setColor(Color.parseColor("#FFCCCB")) // Цвет фона
+            if (tasks[position].urgency == true){
+                drawable.setColor(Color.parseColor("#D6D75555"))
+            }
+
+            // Устанавливаем фон для вашего Layout
+            holder.layout.background = drawable
+        }
+        else if (tasks[position].urgency == true){
+            val drawable = GradientDrawable()
+            drawable.cornerRadius = 46f // Установите радиус закругления
+            drawable.setColor(Color.parseColor("#FFCAAA")) // Цвет фона
 
             // Устанавливаем фон для вашего Layout
             holder.layout.background = drawable
@@ -64,7 +78,6 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
             intent.putExtra("importanceTask", tasks[position].importance)
             intent.putExtra("tagTask", tasks[position].tag)
             intent.putExtra("position", position)
-
 
             if (context is Activity) {
                 (context as Activity).startActivityForResult(intent, 1)

@@ -5,10 +5,16 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,8 +28,10 @@ class TaskActivity : AppCompatActivity() {
 
     private lateinit var time : TextView
     private lateinit var date : TextView
+    var tag : String = "Без тэга"
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    lateinit var adapter : ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +44,6 @@ class TaskActivity : AppCompatActivity() {
         date = findViewById(R.id.date)
         val note : TextView = findViewById(R.id.note)
         val importance : TextView = findViewById(R.id.importance)
-        val tag : TextView = findViewById(R.id.tag)
         val endButton : Button = findViewById(R.id.end_button)
         val saveButton : Button = findViewById(R.id.save_button)
 
@@ -46,8 +53,13 @@ class TaskActivity : AppCompatActivity() {
         date.text = intent.getStringExtra("dateTask")
         note.text = intent.getStringExtra("noteTask")
         importance.text =  if (intent.getBooleanExtra("importanceTask", false) == true) "Да" else "Нет"
-        tag.text = intent.getStringExtra("tagTask")
+        tag = intent.getStringExtra("tagTask").toString()
 
+        val spinner: Spinner = findViewById(R.id.spinner)
+        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Data.options)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.setSelection(Data.options.indexOf(tag))
 
         var position : Int = intent.getIntExtra("position", 0)
 
@@ -71,7 +83,7 @@ class TaskActivity : AppCompatActivity() {
             }
             else{
                 val intentToMain = Intent()
-                val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.tasks[position].importance , Data.tasks[position].tag);
+                val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.tasks[position].importance , Data.tasks[position].urgency, tag);
                 Data.tasks[position] = task
 
 
@@ -86,6 +98,46 @@ class TaskActivity : AppCompatActivity() {
         date.setOnClickListener{
             showDatePickerDialog()
         }
+
+
+
+
+
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (Data.options[position] == "+ Добавить тэг"){
+                    showInputDialog()
+                }
+                else{
+                    tag = Data.options[position]
+                }
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+
+
+        }
+    }
+
+    private fun showInputDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Введите название нового тэга")
+
+        val input = EditText(this)
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { dialog, which ->
+            val userInput = input.text.toString()
+            Data.options[Data.options.size - 1] = userInput
+            Data.options.add("+ Добавить тэг")
+            adapter.notifyDataSetChanged()
+            tag = userInput
+
+        }
+        builder.setNegativeButton("Отмена") { dialog, which -> dialog.cancel() }
+
+        builder.show()
     }
 
     private fun showTimePickerDialog() {

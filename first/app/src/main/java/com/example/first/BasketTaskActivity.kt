@@ -58,7 +58,7 @@ class BasketTaskActivity : AppCompatActivity() {
             val timeTask: String = time.getText().toString();
             val dateTask: String = date.getText().toString();
             val noteTask: String = note.getText().toString();
-            val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, Data.basket[position].importance , Data.basket[position].tag);
+            val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, Data.basket[position].importance , Data.basket[position].urgency,  Data.basket[position].tag);
             Data.basket[position] = task
             Data.tasks.add(Data.basket[position])
             Data.basket.removeAt(position)
@@ -77,7 +77,7 @@ class BasketTaskActivity : AppCompatActivity() {
 
             }
             else{
-                val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.basket[position].importance , Data.basket[position].tag);
+                val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.basket[position].importance, Data.basket[position].urgency, Data.basket[position].tag);
                 Data.basket[position] = task
 
             }

@@ -101,6 +101,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_note" />
 
+
+
     <TextView
         android:id="@+id/switcher_label"
         android:layout_width="100dp"
@@ -114,10 +116,11 @@
         app:layout_constraintTop_toBottomOf="@+id/task_note" />
 
     <TextView
-        android:gravity="center_vertical"
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="84dp"
+        android:gravity="center_vertical"
         android:text="Нет"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
         app:layout_constraintEnd_toStartOf="@+id/switchYesNo" />
@@ -126,9 +129,11 @@
         android:id="@+id/switchYesNo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="56dp"
+        android:layout_marginBottom="84dp"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
         app:layout_constraintEnd_toStartOf="@+id/textView" />
+
+
 
     <TextView
         android:gravity="center_vertical"
@@ -142,11 +147,50 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center_vertical"
+        android:text="Нет"
+        app:layout_constraintBottom_toTopOf="@+id/task_ready"
+        app:layout_constraintEnd_toStartOf="@+id/switchYesNo_urgency" />
+
+    <TextView
+        android:id="@+id/switcher_label_urgency"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="208dp"
+        android:gravity="center_vertical"
+        android:text="Задача срочная"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_note" />
+
+    <Switch
+        android:id="@+id/switchYesNo_urgency"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/task_ready"
+        app:layout_constraintEnd_toStartOf="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="104dp"
+        android:gravity="center_vertical"
+        android:text="Да"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
     <Button
         android:id="@+id/task_ready"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="372dp"
+        android:layout_marginTop="400dp"
         android:text="Готово"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

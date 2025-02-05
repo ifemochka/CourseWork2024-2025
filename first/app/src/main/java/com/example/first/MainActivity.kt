@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var currentTasks = arrayListOf<Task>()
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
-    private val sortOptions = arrayOf("Время", "Важность")
+    private val sortOptions = arrayOf("Время", "Важность", "Срочность")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -109,9 +109,12 @@ class MainActivity : AppCompatActivity() {
             tasksList.adapter = TasksAdapter(currentTasks.sortedWith(compareBy({ it.date }, { it.time })),this)
         }
         else if(option == sortOptions[1]){
-            tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.importance },this)
+            tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.importance }.reversed(),this)
 
-            Toast.makeText(this, "Вы выбрали: $option", Toast.LENGTH_SHORT).show()
+        }
+        else if(option == sortOptions[2]){
+            tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.urgency }.reversed(),this)
+
         }
         else {
             tasksList.adapter = TasksAdapter(currentTasks.filter { it.tag == option },this)

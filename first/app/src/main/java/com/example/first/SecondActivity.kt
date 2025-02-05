@@ -34,6 +34,7 @@ class SecondActivity : AppCompatActivity() {
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     var importance : Boolean = false
+    var urgency : Boolean = false
 
     var tag : String = Data.options[0]
 
@@ -49,6 +50,7 @@ class SecondActivity : AppCompatActivity() {
         val note: EditText = findViewById(R.id.task_note)
 
         val switchYesNo: Switch = findViewById(R.id.switchYesNo)
+        val switchYesNo_urgency: Switch = findViewById(R.id.switchYesNo_urgency)
         val spinner: Spinner = findViewById(R.id.spinner)
 
         val readyButton: Button = findViewById(R.id.task_ready)
@@ -68,20 +70,26 @@ class SecondActivity : AppCompatActivity() {
                 importance = false
             }
         }
+        switchYesNo_urgency.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
+            if (isChecked) {
+                urgency = true
+            } else {
+                urgency = false
+            }
+        }
 
         adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Data.options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (Data.options[position] == "+ Добавить тэг"){
                     showInputDialog()
                 }
-
-
-
+                else{
+                    tag = Data.options[position]
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -96,6 +104,7 @@ class SecondActivity : AppCompatActivity() {
             val noteTask: String = note.getText().toString();
             val dateTask: String = date.getText().toString();
             val importanceTask = importance
+            val urgencyTask = urgency
             val tagTask = tag
 
 
@@ -106,7 +115,7 @@ class SecondActivity : AppCompatActivity() {
             else{
                 val intentToMain = Intent()
 
-                val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, importanceTask, tagTask);
+                val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, importanceTask, urgencyTask, tagTask);
                 Data.tasks.add(task)
 
                 setResult(Activity.RESULT_OK, intentToMain)
@@ -118,8 +127,7 @@ class SecondActivity : AppCompatActivity() {
 
     private fun showInputDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Введите информацию")
-
+        builder.setTitle("Введите название нового тэга")
 
         val input = EditText(this)
         builder.setView(input)
@@ -151,12 +159,10 @@ class SecondActivity : AppCompatActivity() {
                 date.text = String.format("%02d.%02d.%d", selectedDay, selectedMonth + 1, selectedYear)
             }, year, month, day)
 
-        // Показываем диалог
         datePickerDialog.show()
     }
 
     private fun showTimePickerDialog() {
-        // Получаем текущее время
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
