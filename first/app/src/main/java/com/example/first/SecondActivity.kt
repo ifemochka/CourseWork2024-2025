@@ -127,7 +127,7 @@ class SecondActivity : AppCompatActivity() {
         builder.setPositiveButton("OK") { dialog, which ->
             val userInput = input.text.toString()
             Data.options[Data.options.size - 1] = userInput
-            Data.options = Data.options.plus("+ Добавить тэг")
+            Data.options.add("+ Добавить тэг")
             adapter.notifyDataSetChanged()
             Toast.makeText(this, "Добавлено: $userInput", Toast.LENGTH_SHORT).show()
 
