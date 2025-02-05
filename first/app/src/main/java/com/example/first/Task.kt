@@ -34,4 +34,5 @@ class Task(
 object Data {
     var tasks = arrayListOf<Task>()
     var basket = arrayListOf<Task>()
+    var options = arrayOf("Без тэга", "Учёба", "Работа", "Дом", "+ Добавить тэг")
 }

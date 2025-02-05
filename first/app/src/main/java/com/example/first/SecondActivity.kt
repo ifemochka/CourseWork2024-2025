@@ -24,17 +24,18 @@ import java.util.Calendar
 
 import android.widget.TextView
 import java.time.LocalDate
+import androidx.appcompat.app.AlertDialog
 
 class SecondActivity : AppCompatActivity() {
     private lateinit var time: TextView
     private lateinit var date: TextView
+    lateinit var adapter : ArrayAdapter<String>
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-    val options = arrayOf("Без тэга", "Учёба", "Работа", "Дом")
 
     var importance : Boolean = false
 
-    var tag : String = options[0]
+    var tag : String = Data.options[0]
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -68,18 +69,23 @@ class SecondActivity : AppCompatActivity() {
             }
         }
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
+        adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Data.options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                tag = options[position]
+                if (Data.options[position] == "+ Добавить тэг"){
+                    showInputDialog()
+                }
+
+                tag = Data.options[position]
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                tag = options[0]
+                tag = Data.options[0]
             }
         }
 
@@ -108,6 +114,27 @@ class SecondActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun showInputDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Введите информацию")
+
+
+        val input = EditText(this)
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { dialog, which ->
+            val userInput = input.text.toString()
+            Data.options[Data.options.size - 1] = userInput
+            Data.options = Data.options.plus("+ Добавить тэг")
+            adapter.notifyDataSetChanged()
+            Toast.makeText(this, "Добавлено: $userInput", Toast.LENGTH_SHORT).show()
+
+        }
+        builder.setNegativeButton("Отмена") { dialog, which -> dialog.cancel() }
+
+        builder.show()
     }
 
     private fun showDatePickerDialog() {
