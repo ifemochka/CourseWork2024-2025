@@ -24,6 +24,7 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val taskName : TextView = view.findViewById(R.id.task_list_name)
         val taskTime : TextView = view.findViewById(R.id.task_list_time)
+        val taskTag : TextView = view.findViewById(R.id.task_list_tag)
         val layout : LinearLayout = view.findViewById(R.id.linearLayout)
     }
 
@@ -39,8 +40,9 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         var space = " "
         space = space.repeat(41 - tasks[position].tag.length - tasks[position].name.length)
-        holder.taskName.text = tasks[position].name + space + tasks[position].tag
-        holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                         " + tasks[position].time.toString()
+        holder.taskName.text = tasks[position].name
+        holder.taskTag.text = tasks[position].tag
+        holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
 
         if (tasks[position].importance == true){
             val drawable = GradientDrawable()

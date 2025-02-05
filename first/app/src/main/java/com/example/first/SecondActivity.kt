@@ -80,7 +80,7 @@ class SecondActivity : AppCompatActivity() {
                     showInputDialog()
                 }
 
-                tag = Data.options[position]
+
 
             }
 
@@ -129,7 +129,7 @@ class SecondActivity : AppCompatActivity() {
             Data.options[Data.options.size - 1] = userInput
             Data.options.add("+ Добавить тэг")
             adapter.notifyDataSetChanged()
-            Toast.makeText(this, "Добавлено: $userInput", Toast.LENGTH_SHORT).show()
+            tag = userInput
 
         }
         builder.setNegativeButton("Отмена") { dialog, which -> dialog.cancel() }

@@ -19,8 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var currentTasks = arrayListOf<Task>()
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
-    private val options = arrayOf("Время", "Важность")
-    private val tags = arrayOf("Без тэга", "Учёба", "Работа", "Дом")
+    private val sortOptions = arrayOf("Время", "Важность")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -52,11 +51,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         sortButton.setOnClickListener {
-            showOptionsDialog(options)
+            showOptionsDialog(sortOptions)
         }
 
         filterButton.setOnClickListener {
-            showOptionsDialog(tags)
+            showOptionsDialog(Data.options.toTypedArray().copyOfRange(0, Data.options.size-1))
         }
 
 
@@ -106,10 +105,10 @@ class MainActivity : AppCompatActivity() {
     fun onOptionSelected(option: String) {
         currentTasks = Data.tasks
         tasksList.layoutManager = LinearLayoutManager(this)
-        if (option == options[0]){
+        if (option == sortOptions[0]){
             tasksList.adapter = TasksAdapter(currentTasks.sortedWith(compareBy({ it.date }, { it.time })),this)
         }
-        else if(option == options[1]){
+        else if(option == sortOptions[1]){
             tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.importance },this)
 
             Toast.makeText(this, "Вы выбрали: $option", Toast.LENGTH_SHORT).show()
