@@ -132,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         val currentTime = LocalTime.now()
 
         return tasks.filter { task ->
-            task.date > currentDate || (task.date == currentDate && task.time >= currentTime)
+            task.date > currentDate || (task.date == currentDate && task.time > currentTime.minusMinutes(1) )
         }
     }
 
