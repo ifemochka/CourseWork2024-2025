@@ -24,6 +24,7 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val taskName : TextView = view.findViewById(R.id.task_list_name)
         val taskTime : TextView = view.findViewById(R.id.task_list_time)
+        val taskTag : TextView = view.findViewById(R.id.task_list_tag)
         val layout : LinearLayout = view.findViewById(R.id.linearLayout)
     }
 
@@ -37,22 +38,35 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var space = " "
-        space = space.repeat(41 - tasks[position].tag.length - tasks[position].name.length)
-        holder.taskName.text = tasks[position].name + space + tasks[position].tag
-        holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                         " + tasks[position].time.toString()
+        holder.taskName.text = tasks[position].name
+        if (tasks[position].note != "") {
+            holder.taskName.text = tasks[position].name + " (!)"
+        }
+        holder.taskTag.text = tasks[position].tag
+        holder.taskTime.text =
+            tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
 
-        if (tasks[position].importance == true){
+        if (tasks[position].importance == true) {
+            val drawable = GradientDrawable()
+            drawable.cornerRadius = 46f
+            drawable.setColor(Color.parseColor("#FFCCCB")) // Цвет фона
+            if (tasks[position].urgency == true) {
+                drawable.setColor(Color.parseColor("#D6D75555"))
+            }
+
+            // Устанавливаем фон для вашего Layout
+            holder.layout.background = drawable
+        } else if (tasks[position].urgency == true) {
             val drawable = GradientDrawable()
             drawable.cornerRadius = 46f // Установите радиус закругления
-            drawable.setColor(Color.parseColor("#FFCCCB")) // Цвет фона
+            drawable.setColor(Color.parseColor("#FFCAAA")) // Цвет фона
 
             // Устанавливаем фон для вашего Layout
             holder.layout.background = drawable
         }
 
 
-        holder.layout.setOnClickListener{
+        holder.layout.setOnClickListener {
             val intent = Intent(context, BasketTaskActivity::class.java)
 
             intent.putExtra("nameTask", tasks[position].name);
@@ -60,9 +74,9 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
             intent.putExtra("dateTask", tasks[position].date.format(dateFormatter));
             intent.putExtra("noteTask", tasks[position].note)
             intent.putExtra("importanceTask", tasks[position].importance)
+            intent.putExtra("urgencyTask", tasks[position].urgency)
             intent.putExtra("tagTask", tasks[position].tag)
             intent.putExtra("position", position)
-
 
             if (context is Activity) {
                 (context as Activity).startActivityForResult(intent, 1)

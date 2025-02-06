@@ -44,15 +44,16 @@ class TaskActivity : AppCompatActivity() {
         date = findViewById(R.id.date)
         val note : TextView = findViewById(R.id.note)
         val importance : TextView = findViewById(R.id.importance)
+        val urgency : TextView = findViewById(R.id.urgency)
         val endButton : Button = findViewById(R.id.end_button)
         val saveButton : Button = findViewById(R.id.save_button)
-
 
         name.text = intent.getStringExtra("nameTask")
         time.text = intent.getStringExtra("timeTask")
         date.text = intent.getStringExtra("dateTask")
         note.text = intent.getStringExtra("noteTask")
         importance.text =  if (intent.getBooleanExtra("importanceTask", false) == true) "Да" else "Нет"
+        urgency.text =  if (intent.getBooleanExtra("urgencyTask", false) == true) "Да" else "Нет"
         tag = intent.getStringExtra("tagTask").toString()
 
         val spinner: Spinner = findViewById(R.id.spinner)
@@ -169,6 +170,7 @@ class TaskActivity : AppCompatActivity() {
                 date.text = String.format("%02d.%02d.%d", selectedDay, selectedMonth + 1, selectedYear)
             }, year, month, day)
 
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         // Показываем диалог
         datePickerDialog.show()
     }

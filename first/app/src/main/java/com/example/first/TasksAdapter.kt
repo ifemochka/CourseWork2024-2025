@@ -38,8 +38,6 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        var space = " "
-        space = space.repeat(41 - tasks[position].tag.length - tasks[position].name.length)
         holder.taskName.text = tasks[position].name
         if(tasks[position].note != ""){
             holder.taskName.text = tasks[position].name + " (!)"
@@ -76,6 +74,7 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
             intent.putExtra("dateTask", tasks[position].date.format(dateFormatter));
             intent.putExtra("noteTask", tasks[position].note)
             intent.putExtra("importanceTask", tasks[position].importance)
+            intent.putExtra("urgencyTask", tasks[position].urgency)
             intent.putExtra("tagTask", tasks[position].tag)
             intent.putExtra("position", position)
 

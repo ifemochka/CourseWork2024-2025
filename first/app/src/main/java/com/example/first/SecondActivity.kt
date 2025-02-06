@@ -152,12 +152,15 @@ class SecondActivity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
+
         // Создаем DatePickerDialog
         val datePickerDialog = DatePickerDialog(this,
             { _, selectedYear, selectedMonth, selectedDay ->
                 // Обновляем текстовое поле с выбранной датой
                 date.text = String.format("%02d.%02d.%d", selectedDay, selectedMonth + 1, selectedYear)
             }, year, month, day)
+
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
 
         datePickerDialog.show()
     }
@@ -172,6 +175,7 @@ class SecondActivity : AppCompatActivity() {
             // Обновляем TextView с выбранным временем
             time.text = String.format("%02d:%02d", selectedHour, selectedMinute)
         }, hour, minute, true) // true - 24-часовой формат
+
 
         // Показываем диалог
         timePickerDialog.show()
