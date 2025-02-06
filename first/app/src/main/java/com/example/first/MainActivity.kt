@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private var currentTasks = arrayListOf<Task>()
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
-    private val sortOptions = arrayOf("Время", "Важность", "Срочность")
+    private val sortOptions = arrayOf("Время", "Важность", "Срочность", "Текущие задачи")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -45,9 +45,8 @@ class MainActivity : AppCompatActivity() {
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
 
-        reset.setOnClickListener(){
-            tasksList.layoutManager = LinearLayoutManager(this)
-            tasksList.adapter = TasksAdapter(Data.tasks,this)
+        reset.setOnClickListener{
+            Reset()
         }
 
         sortButton.setOnClickListener {
@@ -95,6 +94,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun Reset(){
+        tasksList.layoutManager = LinearLayoutManager(this)
+        tasksList.adapter = TasksAdapter(Data.tasks,this)
+    }
 
 
     private fun showOptionsDialog(list: Array<String>) {
@@ -116,8 +119,20 @@ class MainActivity : AppCompatActivity() {
             tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.urgency }.reversed(),this)
 
         }
+        else if(option == sortOptions[3]){
+            tasksList.adapter = TasksAdapter(filterTasks(currentTasks),this)
+        }
         else {
             tasksList.adapter = TasksAdapter(currentTasks.filter { it.tag == option },this)
+        }
+    }
+
+    fun filterTasks(tasks: List<Task>): List<Task> {
+        val currentDate = LocalDate.now()
+        val currentTime = LocalTime.now()
+
+        return tasks.filter { task ->
+            task.date > currentDate || (task.date == currentDate && task.time >= currentTime)
         }
     }
 

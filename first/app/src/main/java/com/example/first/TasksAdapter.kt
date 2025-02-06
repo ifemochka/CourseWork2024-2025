@@ -13,6 +13,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 
@@ -45,24 +48,38 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
         holder.taskTag.text = tasks[position].tag
         holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
 
-        if (tasks[position].importance == true){
+        val currentDateTime = LocalDateTime.now()
+        val currentTime = currentDateTime.toLocalTime()
+        val currentDate = currentDateTime.toLocalDate()
+
+        if (tasks[position].date < currentDate || (tasks[position].date == currentDate && tasks[position].time < currentTime)){
             val drawable = GradientDrawable()
             drawable.cornerRadius = 46f
-            drawable.setColor(Color.parseColor("#FFCCCB")) // Цвет фона
-            if (tasks[position].urgency == true){
-                drawable.setColor(Color.parseColor("#D6D75555"))
-            }
-
-            // Устанавливаем фон для вашего Layout
+            drawable.setColor(Color.parseColor("#D6E9E1E1"))
             holder.layout.background = drawable
+            holder.taskTime.setTextColor(Color.RED)
         }
-        else if (tasks[position].urgency == true){
-            val drawable = GradientDrawable()
-            drawable.cornerRadius = 46f // Установите радиус закругления
-            drawable.setColor(Color.parseColor("#FFCAAA")) // Цвет фона
+        else{
 
-            // Устанавливаем фон для вашего Layout
-            holder.layout.background = drawable
+            if (tasks[position].importance == true){
+                val drawable = GradientDrawable()
+                drawable.cornerRadius = 46f
+                drawable.setColor(Color.parseColor("#FFCCCB")) // Цвет фона
+                if (tasks[position].urgency == true){
+                    drawable.setColor(Color.parseColor("#D6D75555"))
+                }
+
+                // Устанавливаем фон для вашего Layout
+                holder.layout.background = drawable
+            }
+            else if (tasks[position].urgency == true){
+                val drawable = GradientDrawable()
+                drawable.cornerRadius = 46f // Установите радиус закругления
+                drawable.setColor(Color.parseColor("#FFCAAA")) // Цвет фона
+
+                // Устанавливаем фон для вашего Layout
+                holder.layout.background = drawable
+            }
         }
 
 
