@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val basketButton: Button = findViewById(R.id.basketButton)
+        val calendarButton: Button = findViewById(R.id.calendar)
 
         tasksList = findViewById(R.id.tasksList)
         IfEmpty = findViewById(R.id.empty_label)
@@ -66,6 +67,11 @@ class MainActivity : AppCompatActivity() {
         basketButton.setOnClickListener{
             val intentToBasket = Intent(this, BasketActivity::class.java)
             startActivity(intentToBasket)
+        }
+
+        calendarButton.setOnClickListener{
+            val intentToCalendar = Intent(this, Calendar::class.java)
+            startActivity(intentToCalendar)
         }
 
     }

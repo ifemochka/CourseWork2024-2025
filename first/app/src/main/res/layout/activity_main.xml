@@ -63,6 +63,16 @@
         app:layout_constraintTop_toBottomOf="@+id/filter_button" />
 
 
+    <Button
+        android:id="@+id/calendar"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="4dp"
+        android:text="Календарь"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/basketButton" />
 
     <TextView
         android:id="@+id/empty_label"
@@ -81,11 +91,11 @@
         android:id="@+id/new_button"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginTop="536dp"
+        android:layout_marginTop="532dp"
         android:text="+"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.912"
+        app:layout_constraintHorizontal_bias="0.917"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_label" />
 

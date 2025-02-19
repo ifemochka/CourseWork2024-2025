@@ -4,5 +4,4 @@
 
     <corners android:radius="16dp" /> <!-- Укажите радиус закругления -->
     <solid android:color="#D6BAAFBA" /> <!-- Цвет фона -->
-
 </shape>
