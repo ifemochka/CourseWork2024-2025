@@ -13,10 +13,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,  private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
+    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dateTextView: TextView = view.findViewById(R.id.date_text_view)
         val tasksContainer: LinearLayout = view.findViewById(R.id.tasks_container)
@@ -31,7 +33,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
         val (date, tasks) = items[position]
 
         // Устанавливаем текст даты
-        holder.dateTextView.text = LocalDate.ofYearDay(2025, position+Data.currentDay).toString()
+        holder.dateTextView.text = LocalDate.ofYearDay(2025, position+Data.currentDay).format(dateFormatter)
 
         // Очищаем контейнер задач
         holder.tasksContainer.removeAllViews()

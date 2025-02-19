@@ -34,7 +34,7 @@ class Calendar : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
 
-            val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
+        val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
         recyclerView.adapter = adapter
     }
 }
