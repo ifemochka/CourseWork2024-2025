@@ -30,10 +30,6 @@ class Task(
         tag
     )
 }
-
-
-
-
 data class CalendarTask(val name: String, val color: Int)
 
 
@@ -43,4 +39,5 @@ object Data {
     var options = mutableListOf("Без тэга", "Учёба", "Работа", "Дом", "+ Добавить тэг")
     var currentDay = LocalDate.now().dayOfYear
     var selectedDay = 0
+    val taskColorMap: MutableMap<Task, Int> = mutableMapOf()
 }

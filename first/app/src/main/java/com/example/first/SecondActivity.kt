@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -29,12 +31,16 @@ import androidx.appcompat.app.AlertDialog
 class SecondActivity : AppCompatActivity() {
     private lateinit var time: TextView
     private lateinit var date: TextView
+    var color: Int = Color.parseColor("#D6BAAFBA")
     lateinit var adapter : ArrayAdapter<String>
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     var importance : Boolean = false
     var urgency : Boolean = false
+    var isClickedG : Boolean = false
+    var isClickedB : Boolean = false
+    var isClickedY : Boolean = false
 
     var tag : String = Data.options[0]
 
@@ -54,6 +60,14 @@ class SecondActivity : AppCompatActivity() {
         val spinner: Spinner = findViewById(R.id.spinner)
 
         val readyButton: Button = findViewById(R.id.task_ready)
+        val greenButton: TextView = findViewById(R.id.greenButton)
+        val blueButton: TextView = findViewById(R.id.blueButton)
+        val yellowButton: TextView = findViewById(R.id.yellowButton)
+
+
+        greenButton.background = Background(Color.parseColor("#00FF07"),true)
+        blueButton.background = Background(Color.parseColor("#6FB4F4"),true)
+        yellowButton.background = Background(Color.parseColor("#FDD835"),true)
 
         time.setOnClickListener{
             showTimePickerDialog()
@@ -97,6 +111,59 @@ class SecondActivity : AppCompatActivity() {
             }
         }
 
+        greenButton.setOnClickListener{
+            if (isClickedG == false) {
+                color = Color.parseColor("#00FF07")
+                greenButton.background = Background(Color.parseColor("#00FF07"), false)
+                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
+                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                isClickedG = true
+                isClickedB = false
+                isClickedY = false
+            }
+            else{
+                color = Color.parseColor("#D6BAAFBA")
+                greenButton.background = Background(Color.parseColor("#00FF07"), true)
+                isClickedG = false
+            }
+        }
+
+        blueButton.setOnClickListener{
+            if (isClickedB == false) {
+                color = Color.parseColor("#6FB4F4")
+                greenButton.background = Background(Color.parseColor("#00FF07"), true)
+                blueButton.background = Background(Color.parseColor("#6FB4F4"), false)
+                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                isClickedB= true
+                isClickedG = false
+                isClickedY = false
+            }
+            else{
+                color = Color.parseColor("#D6BAAFBA")
+                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
+                isClickedB = false
+            }
+        }
+
+        yellowButton.setOnClickListener{
+            if (isClickedY == false) {
+                color = Color.parseColor("#FDD835")
+                greenButton.background = Background(Color.parseColor("#00FF07"), true)
+                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
+                yellowButton.background = Background(Color.parseColor("#FDD835"), false)
+                isClickedY= true
+                isClickedG = false
+                isClickedB = false
+            }
+            else{
+                color = Color.parseColor("#D6BAAFBA")
+                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                isClickedY = false
+            }
+        }
+
+
+
 
         readyButton.setOnClickListener{
             val nameTask: String = name.getText().toString();
@@ -117,6 +184,7 @@ class SecondActivity : AppCompatActivity() {
 
                 val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, importanceTask, urgencyTask, tagTask);
                 Data.tasks.add(task)
+                Data.taskColorMap[task] = color
 
                 setResult(Activity.RESULT_OK, intentToMain)
                 finish()
@@ -180,4 +248,17 @@ class SecondActivity : AppCompatActivity() {
         // Показываем диалог
         timePickerDialog.show()
     }
+
+    fun Background(color: Int, isClicked : Boolean) :  GradientDrawable{
+        val drawable = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            setColor(color)
+            if (isClicked == false){
+                setStroke(7, Color.RED)
+            }
+            cornerRadius = 10f
+        }
+        return drawable
+    }
+
 }

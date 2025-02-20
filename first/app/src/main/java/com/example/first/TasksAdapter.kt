@@ -52,6 +52,11 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
         val currentTime = currentDateTime.toLocalTime()
         val currentDate = currentDateTime.toLocalDate()
 
+        val drawable = GradientDrawable()
+        drawable.cornerRadius = 46f
+        Data.taskColorMap[tasks[position]]?.let { drawable.setColor(it) }
+        holder.layout.background = drawable
+
         if (tasks[position].date < currentDate || (tasks[position].date == currentDate && tasks[position].time <= currentTime.minusMinutes(1) )){
             val drawable = GradientDrawable()
             drawable.cornerRadius = 46f

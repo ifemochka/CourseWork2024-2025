@@ -17,7 +17,7 @@ class Calendar : AppCompatActivity() {
         var calendar : List<Pair<String, MutableList<CalendarTask>>> = List(356) { Pair("", mutableListOf()) }
         for(task in Data.tasks){
             val index = task.date.dayOfYear - 1
-            var color: Int = 0xD6BAAFBA.toInt()
+            var color: Int = Data.taskColorMap[task]!!
             if (task.importance == true){
                 color = Color.parseColor("#FFCCCB")
                 if (task.urgency == true){

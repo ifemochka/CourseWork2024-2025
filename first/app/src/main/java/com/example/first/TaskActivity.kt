@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -32,6 +33,7 @@ class TaskActivity : AppCompatActivity() {
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     lateinit var adapter : ArrayAdapter<String>
+    var color: Int = Color.parseColor("#D6BAAFBA")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,9 +87,9 @@ class TaskActivity : AppCompatActivity() {
             else{
                 val intentToMain = Intent()
                 val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.tasks[position].importance , Data.tasks[position].urgency, tag);
+                color = Data.taskColorMap[Data.tasks[position]]!!
                 Data.tasks[position] = task
-
-
+                Data.taskColorMap[task] = color
                 setResult(Activity.RESULT_OK, intentToMain)
                 finish()
             }
