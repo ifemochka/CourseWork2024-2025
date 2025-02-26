@@ -30,7 +30,7 @@ class Task(
         tag
     )
 }
-data class CalendarTask(val name: String, val color: Int)
+data class CalendarTask(val name: String, val color: Int, val time: LocalTime)
 
 
 object Data {
@@ -40,4 +40,7 @@ object Data {
     var currentDay = LocalDate.now().dayOfYear
     var selectedDay = 0
     val taskColorMap: MutableMap<Task, Int> = mutableMapOf()
+    var hoursInDay = 8
+
+    val weekBool: MutableList<Boolean> = mutableListOf(true, true, true, true, true, false, false)
 }

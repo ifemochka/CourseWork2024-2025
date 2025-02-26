@@ -41,6 +41,9 @@ class SecondActivity : AppCompatActivity() {
     var isClickedG : Boolean = false
     var isClickedB : Boolean = false
     var isClickedY : Boolean = false
+    val yellow : Int = Color.parseColor("#E6D79B")
+    val blue : Int = Color.parseColor("#B0CEEF")
+    val green : Int = Color.parseColor("#9ECEA0")
 
     var tag : String = Data.options[0]
 
@@ -65,9 +68,9 @@ class SecondActivity : AppCompatActivity() {
         val yellowButton: TextView = findViewById(R.id.yellowButton)
 
 
-        greenButton.background = Background(Color.parseColor("#00FF07"),true)
-        blueButton.background = Background(Color.parseColor("#6FB4F4"),true)
-        yellowButton.background = Background(Color.parseColor("#FDD835"),true)
+        greenButton.background = Background(green,true)
+        blueButton.background = Background(blue,true)
+        yellowButton.background = Background(yellow,true)
 
         time.setOnClickListener{
             showTimePickerDialog()
@@ -113,57 +116,54 @@ class SecondActivity : AppCompatActivity() {
 
         greenButton.setOnClickListener{
             if (isClickedG == false) {
-                color = Color.parseColor("#00FF07")
-                greenButton.background = Background(Color.parseColor("#00FF07"), false)
-                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
-                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                color = green
+                greenButton.background = Background(green, false)
+                blueButton.background = Background(blue, true)
+                yellowButton.background = Background(yellow, true)
                 isClickedG = true
                 isClickedB = false
                 isClickedY = false
             }
             else{
                 color = Color.parseColor("#D6BAAFBA")
-                greenButton.background = Background(Color.parseColor("#00FF07"), true)
+                greenButton.background = Background(green, true)
                 isClickedG = false
             }
         }
 
         blueButton.setOnClickListener{
             if (isClickedB == false) {
-                color = Color.parseColor("#6FB4F4")
-                greenButton.background = Background(Color.parseColor("#00FF07"), true)
-                blueButton.background = Background(Color.parseColor("#6FB4F4"), false)
-                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                color = blue
+                greenButton.background = Background(green, true)
+                blueButton.background = Background(blue, false)
+                yellowButton.background = Background(yellow, true)
                 isClickedB= true
                 isClickedG = false
                 isClickedY = false
             }
             else{
                 color = Color.parseColor("#D6BAAFBA")
-                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
+                blueButton.background = Background(blue, true)
                 isClickedB = false
             }
         }
 
         yellowButton.setOnClickListener{
             if (isClickedY == false) {
-                color = Color.parseColor("#FDD835")
-                greenButton.background = Background(Color.parseColor("#00FF07"), true)
-                blueButton.background = Background(Color.parseColor("#6FB4F4"), true)
-                yellowButton.background = Background(Color.parseColor("#FDD835"), false)
+                color = yellow
+                greenButton.background = Background(green, true)
+                blueButton.background = Background(blue, true)
+                yellowButton.background = Background(yellow, false)
                 isClickedY= true
                 isClickedG = false
                 isClickedB = false
             }
             else{
                 color = Color.parseColor("#D6BAAFBA")
-                yellowButton.background = Background(Color.parseColor("#FDD835"), true)
+                yellowButton.background = Background(yellow, true)
                 isClickedY = false
             }
         }
-
-
-
 
         readyButton.setOnClickListener{
             val nameTask: String = name.getText().toString();

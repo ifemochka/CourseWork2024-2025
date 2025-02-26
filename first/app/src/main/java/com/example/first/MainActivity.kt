@@ -14,8 +14,6 @@ import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
-
-
     private var currentTasks = arrayListOf<Task>()
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
@@ -41,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         val newButton: Button = findViewById(R.id.new_button)
         val filterButton: Button = findViewById(R.id.filter_button)
         val sortButton: Button = findViewById(R.id.sort_button)
+        val settingsButton: Button = findViewById(R.id.settings)
 
 
         tasksList.layoutManager = LinearLayoutManager(this)
@@ -72,6 +71,11 @@ class MainActivity : AppCompatActivity() {
         calendarButton.setOnClickListener{
             val intentToCalendar = Intent(this, Calendar::class.java)
             startActivity(intentToCalendar)
+        }
+
+        settingsButton.setOnClickListener{
+            val intentToSettings = Intent(this, Settings::class.java)
+            startActivity(intentToSettings)
         }
 
     }

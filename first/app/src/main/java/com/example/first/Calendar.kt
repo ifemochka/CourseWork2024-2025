@@ -27,7 +27,7 @@ class Calendar : AppCompatActivity() {
             else if (task.urgency == true){
                 color = Color.parseColor("#FFCAAA")
             }
-            calendar[index].second.add(CalendarTask(task.name, color))
+            calendar[index].second.add(CalendarTask(task.name, color, task.time))
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
