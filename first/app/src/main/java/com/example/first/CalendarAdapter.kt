@@ -136,7 +136,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
             }
 
             // Создание TextView для подписи полоски
-            if(i%3 == 0){
+            if(i%1 == 0){
                 val label = TextView(context).apply {
                     text = (time + i).toString() + ":00"// Подпись номером полоски
                     setTextColor(Color.DKGRAY)

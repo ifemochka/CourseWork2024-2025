@@ -240,10 +240,21 @@ class SecondActivity : AppCompatActivity() {
 
         // Создаем TimePickerDialog
         val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
-            // Обновляем TextView с выбранным временем
-            time.text = String.format("%02d:%02d", selectedHour, selectedMinute)
+            // Проверяем, находится ли выбранный час в допустимом диапазоне
+            if (selectedHour < 9) {
+                // Если час меньше 9, устанавливаем на 9:00
+                time.text = "09:00"
+            } else if (selectedHour > 21 || (selectedHour == 21 && selectedMinute > 0)) {
+                // Если час больше 21 или 21:01 и позже, устанавливаем на 21:00
+                time.text = "21:00"
+            } else {
+                // Если время в пределах допустимого диапазона, обновляем TextView
+                time.text = String.format("%02d:%02d", selectedHour, selectedMinute)
+            }
         }, hour, minute, true) // true - 24-часовой формат
 
+        // Устанавливаем начальное время в пределах диапазона
+        timePickerDialog.updateTime(9, 0)
 
         // Показываем диалог
         timePickerDialog.show()
