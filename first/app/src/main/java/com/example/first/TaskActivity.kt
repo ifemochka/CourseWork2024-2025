@@ -68,8 +68,8 @@ class TaskActivity : AppCompatActivity() {
 
         endButton.setOnClickListener{
             val intentToMain = Intent()
-            Data.basket.add(Data.tasks[position])
-            Data.tasks.removeAt(position)
+            Data.basket.add(Data.currentTasks[position])
+            Data.tasks.removeAt(Data.tasks.indexOf(Data.currentTasks[position]))
 
             setResult(Activity.RESULT_OK, intentToMain)
             finish()
@@ -87,8 +87,9 @@ class TaskActivity : AppCompatActivity() {
             else{
                 val intentToMain = Intent()
                 val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.tasks[position].importance , Data.tasks[position].urgency, tag);
-                color = Data.taskColorMap[Data.tasks[position]]!!
-                Data.tasks[position] = task
+                color = Data.taskColorMap[Data.currentTasks[position]]!!
+                val index = Data.tasks.indexOf(Data.currentTasks[position])
+                Data.tasks[index] = task
                 Data.taskColorMap[task] = color
                 setResult(Activity.RESULT_OK, intentToMain)
                 finish()

@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
-    private var currentTasks = arrayListOf<Task>()
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
     private val sortOptions = arrayOf("Время", "Важность", "Срочность", "Текущие задачи")
@@ -25,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Data.currentTasks = Data.tasks
 
 
         val basketButton: Button = findViewById(R.id.basketButton)
@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Data.currentTasks = Data.tasks
 
         if(Data.tasks.size != 0){
             IfEmpty.text = "";
@@ -93,6 +94,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume(){
         super.onResume()
+        Data.currentTasks = Data.tasks
+        Data.currentTasks = Data.currentTasks
         if(Data.tasks.size != 0){
             IfEmpty.text = "";
         }
@@ -105,6 +108,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun Reset(){
+        Data.currentTasks = Data.tasks
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
     }
@@ -116,24 +120,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun onOptionSelected(option: String) {
-        currentTasks = Data.tasks
+        Data.currentTasks = Data.tasks
         tasksList.layoutManager = LinearLayoutManager(this)
         if (option == sortOptions[0]){
-            tasksList.adapter = TasksAdapter(currentTasks.sortedWith(compareBy({ it.date }, { it.time })),this)
+            Data.currentTasks = Data.currentTasks.sortedWith(compareBy({ it.date }, { it.time })) as ArrayList<Task>
+            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
         }
         else if(option == sortOptions[1]){
-            tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.importance }.reversed(),this)
+            Data.currentTasks = Data.currentTasks.sortedBy { it.importance }.reversed() as ArrayList<Task>
+            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
 
         }
         else if(option == sortOptions[2]){
-            tasksList.adapter = TasksAdapter(currentTasks.sortedBy { it.urgency }.reversed(),this)
+            Data.currentTasks =
+                Data.currentTasks.sortedBy { it.urgency }.reversed() as ArrayList<Task>
+            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
 
         }
         else if(option == sortOptions[3]){
-            tasksList.adapter = TasksAdapter(filterTasks(currentTasks),this)
+            Data.currentTasks = filterTasks(Data.currentTasks) as ArrayList<Task>
+            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
         }
         else {
-            tasksList.adapter = TasksAdapter(currentTasks.filter { it.tag == option },this)
+            Data.currentTasks = Data.currentTasks.filter { it.tag == option } as ArrayList<Task>
+            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
         }
     }
 

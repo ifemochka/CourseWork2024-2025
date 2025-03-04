@@ -34,6 +34,30 @@ class DayActivity : AppCompatActivity() {
         tasksList.adapter = TasksAdapter(orant, this)
 
     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+
+        if(orant.size != 0){
+            IfEmpty.text = "";
+        }
+
+        tasksList.layoutManager = LinearLayoutManager(this)
+        tasksList.adapter = TasksAdapter(orant, this)
+    }
+
+    override fun onResume(){
+        super.onResume()
+        val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+
+        if(orant.size != 0){
+            IfEmpty.text = "";
+        }
+
+        tasksList.layoutManager = LinearLayoutManager(this)
+        tasksList.adapter = TasksAdapter(orant, this)
+
+    }
     companion object {
         const val REQUEST_CODE = 10
     }

@@ -35,6 +35,7 @@ data class CalendarTask(val name: String, val color: Int, val time: LocalTime)
 
 object Data {
     var tasks = arrayListOf<Task>()
+    var currentTasks = arrayListOf<Task>()
     var basket = arrayListOf<Task>()
     var options = mutableListOf("Без тэга", "Учёба", "Работа", "Дом", "+ Добавить тэг")
     var currentDay = LocalDate.now().dayOfYear

@@ -1,5 +1,6 @@
 package com.example.first
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -14,6 +15,22 @@ class Calendar : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+
+        ResetCalendar()
+
+
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        ResetCalendar()
+    }
+    override fun onResume(){
+        super.onResume()
+        ResetCalendar()
+
+    }
+
+    private fun ResetCalendar() {
         var calendar : List<Pair<String, MutableList<CalendarTask>>> = List(356) { Pair("", mutableListOf()) }
         for(task in Data.tasks){
             val index = task.date.dayOfYear - 1
@@ -29,7 +46,6 @@ class Calendar : AppCompatActivity() {
             }
             calendar[index].second.add(CalendarTask(task.name, color, task.time))
         }
-
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
