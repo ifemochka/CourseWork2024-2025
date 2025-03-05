@@ -1,33 +1,46 @@
 package com.example.first
 
+import android.app.Activity
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.text.TextUtils
+import android.util.Log
+import android.view.DragEvent
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
 
-class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,  private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
+
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dateTextView: TextView = view.findViewById(R.id.date_text_view)
         val tasksContainer: RelativeLayout = view.findViewById(R.id.tasks_container)
+
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
@@ -43,16 +56,21 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
         //val dayOfWeek = (LocalDate.ofYearDay(2025, position+Data.currentDay).dayOfWeek).value % 7
 
 
+        holder.tasksContainer.setOnDragListener(dragListener)
 
-
-        // Очищаем контейнер задач
         holder.tasksContainer.removeAllViews()
 
-        // Если есть задачи, добавляем их в контейнер
         if (tasks.isNotEmpty()) {
             for (task in tasks) {
                 val taskTextView = TextView(holder.itemView.context).apply {
                     text = task.name
+                    id = View.generateViewId()
+                   /*setOnClickListener {
+                        // Получение ID нажатого TextView
+                        val clickedId = id
+                        Toast.makeText(context, "Clicked on: $text with ID: $clickedId", Toast.LENGTH_SHORT).show()
+                    }*/
+
                     textSize = 14f
                     maxLines = 1
                     ellipsize = TextUtils.TruncateAt.END
@@ -61,7 +79,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
 
                     setPadding(4, 4, 4, 4)
                     background = GradientDrawable().apply {
-                        setColor(task.color)
+                        setColor(Data.taskColorMap[task]!!)
                         cornerRadius = 40f
                     }
 
@@ -72,29 +90,19 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
                         topMargin = (topMarginDp * resources.displayMetrics.density).toInt() // Конвертация dp в px
                     }
                 }
+                /*taskTextView.setOnLongClickListener {
+                    setupDragAndDrop(taskTextView)
+                    true
+                }*/
+
+
 
 
                 holder.tasksContainer.addView(taskTextView)
+                Data.taskId[taskTextView] = task
+                setupGestureDetector(taskTextView)
             }
-        } /*else {
-            val taskTextView = TextView(holder.itemView.context).apply {
-                text = "Задач нет"
-                textSize = 14f
-                maxLines = 1
-                ellipsize = TextUtils.TruncateAt.END
-                gravity = Gravity.CENTER
-
-                setPadding(4, 4, 4, 4)
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    48.dpToPx(holder.itemView.context)
-                )
-
-            }
-            holder.tasksContainer.addView(taskTextView)
-            // Если нет задач, можно добавить пустую ячейку или оставить ее пустой
-            //holder.tasksContainer.visibility = View.GONE // Скрываем контейнер если нет задач
-        }*/
+        }
 
         createHorizontalStrips(holder.tasksContainer)
 
@@ -155,6 +163,120 @@ class CalendarAdapter(private val items: List<Pair<String, List<CalendarTask>>>,
         }
     }
 
+    private fun setupGestureDetector(view: TextView) {
+        val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
+                val intent = Intent(context, TaskActivity::class.java)
+
+
+
+                val task = Data.taskId[view]!!
+                Data.currentTasks = arrayListOf<Task> (task)
+                intent.putExtra("nameTask", task.name);
+                intent.putExtra("timeTask", task.time.toString());
+                intent.putExtra("dateTask", task.date.format(dateFormatter));
+                intent.putExtra("noteTask", task.note)
+                intent.putExtra("importanceTask", task.importance)
+                intent.putExtra("urgencyTask", task.urgency)
+                intent.putExtra("tagTask", task.tag)
+
+                if (context is Activity) {
+                    (context as Activity).startActivityForResult(intent, 1)
+                }
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                // Обработка долгого нажатия для начала перетаскивания
+                val data = ClipData.newPlainText("", "")
+                val shadowBuilder = View.DragShadowBuilder(view)
+                view.startDragAndDrop(data, shadowBuilder, view, 0)
+                view.visibility = View.INVISIBLE // Скрыть во время перетаскивания
+            }
+        })
+
+        view.setOnTouchListener { v, event ->
+            gestureDetector.onTouchEvent(event)
+            true
+        }
+    }
+    fun setupDragAndDrop(view: View) {
+        view.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                val data = ClipData.newPlainText("", "")
+                val shadowBuilder = View.DragShadowBuilder(v)
+                v.startDragAndDrop(data, shadowBuilder, v, 0)
+                true
+            } else {
+                false
+            }
+        }
+    }
+    val dragListener = View.OnDragListener { v, event ->
+        when (event.action) {
+            DragEvent.ACTION_DRAG_STARTED -> true
+            DragEvent.ACTION_DRAG_ENTERED -> true
+            DragEvent.ACTION_DRAG_EXITED -> true
+            DragEvent.ACTION_DROP -> {
+                val draggedView = event.localState as View
+                val owner = draggedView.parent as ViewGroup
+                owner.removeView(draggedView)
+                val container = v as RelativeLayout
+                val dropY = event.y
+
+
+                // Получаем родительский LinearLayout
+                val parent = container.parent.parent as LinearLayout
+
+                Toast.makeText(context, " ${parent::class.simpleName}", Toast.LENGTH_SHORT).show()
+
+
+                val scrollView = container.parent as ScrollView
+                // Получаем позицию контейнера в адаптере
+                val position = parent.indexOfChild(scrollView)
+
+                // Получаем дату из dateTextView в родительском LinearLayout
+                val dateTextView = parent.findViewById<TextView>(R.id.date_text_view)
+                val date = dateTextView.text.toString()
+                Toast.makeText(context, "TextView с текстом '${(draggedView as TextView).text}' был перенесен в RelativeLayout с датой $date", Toast.LENGTH_SHORT).show()
+
+
+                val temp = Data.taskId[draggedView]!!
+                val index = Data.tasks.indexOf(temp)
+                val time = (dropY / context.resources.displayMetrics.density * Data.hoursInDay * 60 / 720 ).toInt() + 9 * 60
+                val hours = time / 60
+                val minutes = time % 60
+
+                val formattedTime = LocalTime.of(hours, minutes)
+                Toast.makeText(context, "${formattedTime}", Toast.LENGTH_SHORT).show()
+
+                Data.tasks[index] = Task(temp.name, formattedTime, LocalDate.parse(date, dateFormatter), temp.note, temp.importance, temp.urgency, temp.tag)
+                Data.taskId[draggedView] = Data.tasks[index]
+                Data.taskColorMap[Data.tasks[index]] = Data.taskColorMap[temp] as Int
+
+
+
+
+                val params = RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    36.dpToPx(context)
+                ).apply {
+                    topMargin = dropY.toInt()
+                }
+                container.addView(draggedView, params)
+                draggedView.visibility = View.VISIBLE
+                true
+            }
+            DragEvent.ACTION_DRAG_ENDED -> true
+            else -> false
+        }
+    }
 }
+
+
+
+
+
+
 
 

@@ -2,12 +2,14 @@ package com.example.first
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.TextView
 import java.time.LocalDate
 import java.time.LocalTime
 
 import java.io.Serializable
 
 class Task(
+
     val name: String,
     private val timeString: String,
     private val dateString: String,
@@ -30,7 +32,6 @@ class Task(
         tag
     )
 }
-data class CalendarTask(val name: String, val color: Int, val time: LocalTime)
 
 
 object Data {
@@ -41,6 +42,7 @@ object Data {
     var currentDay = LocalDate.now().dayOfYear
     var selectedDay = 0
     val taskColorMap: MutableMap<Task, Int> = mutableMapOf()
+    val taskId: MutableMap<TextView, Task> = mutableMapOf()
     var hoursInDay = 8
 
     val weekBool: MutableList<Boolean> = mutableListOf(true, true, true, true, true, false, false)

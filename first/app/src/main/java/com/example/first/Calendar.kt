@@ -1,9 +1,15 @@
 package com.example.first
 
+import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.DragEvent
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -31,7 +37,8 @@ class Calendar : AppCompatActivity() {
     }
 
     private fun ResetCalendar() {
-        var calendar : List<Pair<String, MutableList<CalendarTask>>> = List(356) { Pair("", mutableListOf()) }
+        Data.taskId.clear()
+        var calendar : List<Pair<String, MutableList<Task>>> = List(356) { Pair("", mutableListOf()) }
         for(task in Data.tasks){
             val index = task.date.dayOfYear - 1
             var color: Int = Data.taskColorMap[task]!!
@@ -44,7 +51,8 @@ class Calendar : AppCompatActivity() {
             else if (task.urgency == true){
                 color = Color.parseColor("#FFCAAA")
             }
-            calendar[index].second.add(CalendarTask(task.name, color, task.time))
+            calendar[index].second.add(task)
+            Data.taskColorMap[task] = color
         }
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -53,4 +61,5 @@ class Calendar : AppCompatActivity() {
         val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
         recyclerView.adapter = adapter
     }
+
 }
