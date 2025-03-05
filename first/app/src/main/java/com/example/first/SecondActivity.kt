@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -31,6 +32,7 @@ import androidx.appcompat.app.AlertDialog
 class SecondActivity : AppCompatActivity() {
     private lateinit var time: TextView
     private lateinit var date: TextView
+    private lateinit var note: TextView
     var color: Int = Color.parseColor("#D6BAAFBA")
     lateinit var adapter : ArrayAdapter<String>
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -56,7 +58,7 @@ class SecondActivity : AppCompatActivity() {
         val name: EditText = findViewById(R.id.task_name)
         time = findViewById(R.id.task_time)
         date = findViewById(R.id.task_date)
-        val note: EditText = findViewById(R.id.task_note)
+        note = findViewById(R.id.task_note)
 
         val switchYesNo: Switch = findViewById(R.id.switchYesNo)
         val switchYesNo_urgency: Switch = findViewById(R.id.switchYesNo_urgency)
@@ -78,6 +80,9 @@ class SecondActivity : AppCompatActivity() {
 
         date.setOnClickListener{
             showDatePickerDialog()
+        }
+        note.setOnClickListener{
+            noteDialog()
         }
 
         switchYesNo.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
@@ -191,6 +196,26 @@ class SecondActivity : AppCompatActivity() {
             }
 
         }
+    }
+    private fun noteDialog(){
+        val builder = AlertDialog.Builder(this)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_note, null)
+        val editNote = dialogView.findViewById<EditText>(R.id.editNote)
+        if(note.text != ""){
+            editNote.setText(note.text)
+            editNote.setSelection(note.text.length)
+        }
+
+        builder.setView(dialogView)
+            .setTitle("Заметка")
+            .setPositiveButton("Сохранить") { dialog, which ->
+                note.text = editNote.text.toString()
+            }
+            .setNegativeButton("Отмена") { dialog, which ->
+                dialog.cancel()
+            }
+
+        builder.show()
     }
 
     private fun showInputDialog() {
