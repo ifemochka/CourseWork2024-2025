@@ -9,6 +9,7 @@ import android.view.DragEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +23,13 @@ class Calendar : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
 
+        val list: ImageView = findViewById(R.id.list)
+
         ResetCalendar()
+        list.setOnClickListener{
+            val intentToCalendar = Intent(this, MainActivity::class.java)
+            startActivity(intentToCalendar)
+        }
 
 
     }

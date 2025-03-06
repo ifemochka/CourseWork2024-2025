@@ -3,6 +3,7 @@ package com.example.first
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         Data.currentTasks = Data.tasks
 
 
-        val basketButton: Button = findViewById(R.id.basketButton)
-        val calendarButton: Button = findViewById(R.id.calendar)
+        val basketButton: ImageView = findViewById(R.id.basketButton)
+        val calendarButton: ImageView = findViewById(R.id.calendar)
 
         tasksList = findViewById(R.id.tasksList)
         IfEmpty = findViewById(R.id.empty_label)
@@ -37,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         }
         val reset : TextView = findViewById(R.id.reset)
         val newButton: Button = findViewById(R.id.new_button)
-        val filterButton: Button = findViewById(R.id.filter_button)
-        val sortButton: Button = findViewById(R.id.sort_button)
-        val settingsButton: Button = findViewById(R.id.settings)
+        val filterButton: ImageView  = findViewById(R.id.filter_button)
+        val sortButton: ImageView  = findViewById(R.id.sort_button)
+        val settingsButton: ImageView = findViewById(R.id.settings)
 
 
         tasksList.layoutManager = LinearLayoutManager(this)
