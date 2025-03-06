@@ -85,7 +85,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
 
                     layoutParams = RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT,
-                        36.dpToPx(holder.itemView.context)
+                        44.dpToPx(holder.itemView.context)
                     ).apply {
                         topMargin = (topMarginDp * resources.displayMetrics.density).toInt() // Конвертация dp в px
                     }
@@ -259,7 +259,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
 
                 val params = RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
-                    36.dpToPx(context)
+                    44.dpToPx(context)
                 ).apply {
                     topMargin = dropY.toInt()
                 }
