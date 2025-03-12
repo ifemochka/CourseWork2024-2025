@@ -5,49 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="200dp"
+        android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="208dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="44dp"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:text="Выберите длину рабочего дня:"
+        android:text="Выберите время начало и работы:"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginEnd="8dp"
-        android:text="8"
-        android:textSize = "28dp"
-        android:gravity="center_vertical"
-        app:layout_constraintEnd_toStartOf="@+id/switcher"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-    <Switch
-        android:id="@+id/switcher"
-        android:layout_width="50dp"
+        android:id="@+id/tvStartTime"
+        android:layout_width="70dp"
         android:layout_height="50dp"
         android:layout_marginStart="44dp"
+        android:text = "09:00"
+        android:gravity="center"
+        android:textSize="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvEndTime"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:gravity="center_vertical"
-        android:text="12"
-        android:textSize="28dp"
-        app:layout_constraintStart_toEndOf="@+id/switcher"
-        app:layout_constraintTop_toTopOf="@+id/switcher" />
+        android:text = "17:00"
+        android:gravity="center"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@+id/tvStartTime"
+        app:layout_constraintTop_toTopOf="@+id/tvStartTime" />
+
 
     <TextView
         android:id="@+id/textView4"
@@ -57,9 +50,8 @@
         android:gravity="center_vertical"
         android:text="Выберите рабочие дни:"
         android:textSize="18dp"
-        app:layout_constraintTop_toBottomOf="@+id/switcher"
-        tools:layout_editor_absoluteX="0dp" />
-
+        app:layout_constraintTop_toBottomOf="@+id/tvStartTime"
+        tools:layout_editor_absoluteX="7dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

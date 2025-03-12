@@ -65,17 +65,12 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 val taskTextView = TextView(holder.itemView.context).apply {
                     text = task.name
                     id = View.generateViewId()
-                   /*setOnClickListener {
-                        // Получение ID нажатого TextView
-                        val clickedId = id
-                        Toast.makeText(context, "Clicked on: $text with ID: $clickedId", Toast.LENGTH_SHORT).show()
-                    }*/
 
                     textSize = 14f
                     maxLines = 1
                     ellipsize = TextUtils.TruncateAt.END
                     gravity = Gravity.CENTER
-                    val topMarginDp = 720 * (task.time.hour * 60 + task.time.minute - (9 * 60)) / (Data.hoursInDay * 60)
+                    val topMarginDp = 720 * (task.time.hour * 60 + task.time.minute - (Data.start.hour * 60)) / (Data.hoursInDay * 60)
 
                     setPadding(4, 4, 4, 4)
                     background = GradientDrawable().apply {
@@ -85,19 +80,11 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
 
                     layoutParams = RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT,
-                        44.dpToPx(holder.itemView.context)
+                        48.dpToPx(holder.itemView.context)
                     ).apply {
                         topMargin = (topMarginDp * resources.displayMetrics.density).toInt() // Конвертация dp в px
                     }
                 }
-                /*taskTextView.setOnLongClickListener {
-                    setupDragAndDrop(taskTextView)
-                    true
-                }*/
-
-
-
-
                 holder.tasksContainer.addView(taskTextView)
                 Data.taskId[taskTextView] = task
                 setupGestureDetector(taskTextView)
@@ -130,7 +117,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
     private fun createHorizontalStrips(parent: RelativeLayout) {
         val stripHeight = 1.5 // высота полоски в dp
         val stripCount = Data.hoursInDay // количество полосок (500dp / 100dp)
-        val time = 9
+        val time = Data.start.hour
 
         for (i in 0 until stripCount) {
             val strip = View(context).apply {
@@ -200,18 +187,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
             true
         }
     }
-    fun setupDragAndDrop(view: View) {
-        view.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_DOWN) {
-                val data = ClipData.newPlainText("", "")
-                val shadowBuilder = View.DragShadowBuilder(v)
-                v.startDragAndDrop(data, shadowBuilder, v, 0)
-                true
-            } else {
-                false
-            }
-        }
-    }
+
     val dragListener = View.OnDragListener { v, event ->
         when (event.action) {
             DragEvent.ACTION_DRAG_STARTED -> true
@@ -228,7 +204,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 // Получаем родительский LinearLayout
                 val parent = container.parent.parent as LinearLayout
 
-                Toast.makeText(context, " ${parent::class.simpleName}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, " ${parent::class.simpleName}", Toast.LENGTH_SHORT).show()
 
 
                 val scrollView = container.parent as ScrollView
@@ -238,28 +214,26 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 // Получаем дату из dateTextView в родительском LinearLayout
                 val dateTextView = parent.findViewById<TextView>(R.id.date_text_view)
                 val date = dateTextView.text.toString()
-                Toast.makeText(context, "TextView с текстом '${(draggedView as TextView).text}' был перенесен в RelativeLayout с датой $date", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Задача '${(draggedView as TextView).text}' был перенесена $date", Toast.LENGTH_SHORT).show()
 
 
                 val temp = Data.taskId[draggedView]!!
                 val index = Data.tasks.indexOf(temp)
-                val time = (dropY / context.resources.displayMetrics.density * Data.hoursInDay * 60 / 720 ).toInt() + 9 * 60
+                val time = (dropY / context.resources.displayMetrics.density * Data.hoursInDay * 60 / 720 ).toInt() + Data.start.hour * 60
                 val hours = time / 60
                 val minutes = time % 60
 
                 val formattedTime = LocalTime.of(hours, minutes)
-                Toast.makeText(context, "${formattedTime}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "${formattedTime}", Toast.LENGTH_SHORT).show()
 
                 Data.tasks[index] = Task(temp.name, formattedTime, LocalDate.parse(date, dateFormatter), temp.note, temp.importance, temp.urgency, temp.tag)
                 Data.taskId[draggedView] = Data.tasks[index]
                 Data.taskColorMap[Data.tasks[index]] = Data.taskColorMap[temp] as Int
 
 
-
-
                 val params = RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT,
-                    44.dpToPx(context)
+                    48.dpToPx(context)
                 ).apply {
                     topMargin = dropY.toInt()
                 }
@@ -272,11 +246,3 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
         }
     }
 }
-
-
-
-
-
-
-
-

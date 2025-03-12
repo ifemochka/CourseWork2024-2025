@@ -17,6 +17,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.first.Data.end
+import com.example.first.Data.start
 
 class Calendar : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +33,8 @@ class Calendar : AppCompatActivity() {
             startActivity(intentToCalendar)
         }
 
-
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         ResetCalendar()
@@ -44,6 +46,7 @@ class Calendar : AppCompatActivity() {
     }
 
     private fun ResetCalendar() {
+        Data.hoursInDay = Data.end.hour - Data.start.hour
         Data.taskId.clear()
         var calendar : List<Pair<String, MutableList<Task>>> = List(356) { Pair("", mutableListOf()) }
         for(task in Data.tasks){
@@ -68,5 +71,4 @@ class Calendar : AppCompatActivity() {
         val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
         recyclerView.adapter = adapter
     }
-
 }

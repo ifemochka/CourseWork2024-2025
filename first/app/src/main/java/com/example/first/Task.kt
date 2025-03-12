@@ -43,7 +43,8 @@ object Data {
     var selectedDay = 0
     val taskColorMap: MutableMap<Task, Int> = mutableMapOf()
     val taskId: MutableMap<TextView, Task> = mutableMapOf()
-    var hoursInDay = 8
-
+    var start: LocalTime = LocalTime.of(9,0)
+    var end : LocalTime = LocalTime.of(17, 0)
+    var hoursInDay = end.hour - start.hour
     val weekBool: MutableList<Boolean> = mutableListOf(true, true, true, true, true, false, false)
 }

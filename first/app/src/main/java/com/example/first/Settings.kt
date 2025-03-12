@@ -1,5 +1,6 @@
 package com.example.first
 
+import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
-import android.widget.CompoundButton
-import android.widget.Switch
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalTime
 
+import java.util.Calendar
 class Settings : AppCompatActivity() {
+
+    private lateinit var tvStartTime: TextView
+    private lateinit var tvEndTime: TextView
+    private var startTimeInMillis: Long = 0
+
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CheckboxAdapter
@@ -27,21 +31,19 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val switcher: Switch = findViewById(R.id.switcher)
-        if (Data.hoursInDay == 12){
-            switcher.isChecked = true}
-        else{
-            switcher.isChecked = false
-        }
-        switcher.setOnCheckedChangeListener { _: CompoundButton, isChecked: Boolean ->
-            if (isChecked) {
-                Data.hoursInDay = 12
-            } else {
-                Data.hoursInDay = 8
-            }
+        tvStartTime = findViewById(R.id.tvStartTime)
+        tvEndTime = findViewById(R.id.tvEndTime)
+        tvStartTime.text = Data.start.toString()
+        tvEndTime.text = Data.end.toString()
+
+        tvStartTime.setOnClickListener {
+            showTimePickerDialog(true)
         }
 
-        // Пример списка элементов
+        tvEndTime.setOnClickListener {
+            showTimePickerDialog(false)
+        }
+
         val week = listOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье")
         adapter = CheckboxAdapter(this, week)
         recyclerView.adapter = adapter
@@ -50,6 +52,31 @@ class Settings : AppCompatActivity() {
         backButton.setOnClickListener{
             finish()
         }
+    }
+
+    private fun showTimePickerDialog(isStartTime: Boolean) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        val timePickerDialog = TimePickerDialog(this, { _, selectedHour, _ ->
+
+            if (isStartTime) {
+                tvStartTime.text = String.format("%02d:00", selectedHour)
+                Data.start = LocalTime.of(selectedHour, 0)
+            } else {
+                // Устанавливаем время окончания только если оно больше времени начала
+                if (selectedHour > Data.start.hour) {
+                    tvEndTime.text = String.format("%02d:00", selectedHour)
+                    Data.end = LocalTime.of(selectedHour, 0)
+                } else {
+                    // Здесь можно добавить сообщение о том, что конечное время должно быть больше начального
+                    tvEndTime.text = "23:00"
+                    Data.end = LocalTime.of(23, 0)
+                }
+            }
+        }, hour, 0, true)
+
+        timePickerDialog.show()
     }
 }
 
