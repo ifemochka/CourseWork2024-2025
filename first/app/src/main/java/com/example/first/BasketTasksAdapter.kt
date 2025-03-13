@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
@@ -24,8 +26,10 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
     class MyViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val taskName : TextView = view.findViewById(R.id.task_list_name)
         val taskTime : TextView = view.findViewById(R.id.task_list_time)
+        val noteText : TextView = view.findViewById(R.id.note)
         val taskTag : TextView = view.findViewById(R.id.task_list_tag)
         val layout : LinearLayout = view.findViewById(R.id.linearLayout)
+        val svgImageView: ImageView = view.findViewById(R.id.my_svg_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -38,13 +42,39 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        var flag = false
         holder.taskName.text = tasks[position].name
-        if (tasks[position].note != "") {
-            holder.taskName.text = tasks[position].name + " (!)"
+        if(tasks[position].note != ""){
+            holder.svgImageView.visibility = View.VISIBLE
+        }
+        holder.svgImageView.setOnClickListener{
+            if(flag == false){
+                val layoutParams = holder.noteText.layoutParams
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                holder.noteText.layoutParams = layoutParams
+                holder.noteText.text = tasks[position].note
+                holder.svgImageView.setImageResource(R.drawable.arrow_up)
+                flag = true
+            }
+            else{
+                val layoutParams = holder.noteText.layoutParams
+                layoutParams.height = 0
+                holder.noteText.layoutParams = layoutParams
+                holder.svgImageView.setImageResource(R.drawable.arrow_down)
+                flag = false
+            }
         }
         holder.taskTag.text = tasks[position].tag
-        holder.taskTime.text =
-            tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
+        holder.taskTime.text =tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
+
+        val currentDateTime = LocalDateTime.now()
+        val currentTime = currentDateTime.toLocalTime()
+        val currentDate = currentDateTime.toLocalDate()
+
+        val drawable = GradientDrawable()
+        drawable.cornerRadius = 46f
+        Data.taskColorMap[tasks[position]]?.let { drawable.setColor(it) }
+        holder.layout.background = drawable
 
         if (tasks[position].importance == true) {
             val drawable = GradientDrawable()

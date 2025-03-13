@@ -96,7 +96,12 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
         holder.tasksContainer.setBackgroundResource(R.drawable.rounded_background)
 
         if(Data.weekBool[((LocalDate.ofYearDay(2025, position+Data.currentDay - 1)).dayOfWeek.value % 7)]){
-            holder.tasksContainer.setBackgroundColor(Color.parseColor("#E3F1FF"))
+            //holder.tasksContainer.setBackgroundColor(Color.parseColor("#E3F1FF"))
+            val drawable = GradientDrawable()
+            drawable.cornerRadius = 46f // Установите радиус закругления
+            drawable.setColor(Color.parseColor("#E3F1FF")) // Цвет фона
+
+            holder.tasksContainer.background = drawable
         }
 
         holder.tasksContainer.setOnClickListener{

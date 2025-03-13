@@ -124,8 +124,8 @@ class MainActivity : AppCompatActivity() {
         Data.currentTasks = Data.tasks
         tasksList.layoutManager = LinearLayoutManager(this)
         if (option == sortOptions[0]){
-            Data.currentTasks = Data.currentTasks.sortedWith(compareBy({ it.date }, { it.time })) as ArrayList<Task>
-            tasksList.adapter = TasksAdapter(Data.currentTasks,this)
+            Data.currentTasks = ArrayList(Data.currentTasks.sortedWith(compareBy({ it.date }, { it.time })) )
+            tasksList.adapter = TasksAdapter(Data.currentTasks ,this)
         }
         else if(option == sortOptions[1]){
             Data.currentTasks = Data.currentTasks.sortedBy { it.importance }.reversed() as ArrayList<Task>

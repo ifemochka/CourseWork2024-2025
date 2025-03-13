@@ -2,39 +2,39 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="900dp"
-    android:orientation="vertical"
-    android:padding="5dp"
     android:layout_marginBottom="40dp"
-    >
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/text_view"
         android:layout_width="100dp"
-        android:layout_height="20dp"
-        android:textSize="16sp"
+        android:layout_height="5dp"
+        android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/date_text_view"
         android:layout_width="100dp"
         android:layout_height="20dp"
-        android:textSize="16sp"
+        android:ellipsize="end"
         android:gravity="center"
         android:maxLines="1"
-        android:ellipsize="end" />
+        android:textSize="16sp" />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:id="@+id/tasks_container"
-            android:orientation="vertical"
-            android:background="@drawable/rounded_background"
             android:layout_width="match_parent"
-            android:layout_height="720dp" />
+            android:layout_height="720dp"
+            android:background="@drawable/rounded_background"
+            android:orientation="vertical" />
     </ScrollView>
 
 

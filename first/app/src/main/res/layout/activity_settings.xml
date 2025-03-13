@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="350dp"
@@ -40,7 +39,6 @@
         android:textSize="20dp"
         app:layout_constraintStart_toEndOf="@+id/tvStartTime"
         app:layout_constraintTop_toTopOf="@+id/tvStartTime" />
-
 
     <TextView
         android:id="@+id/textView4"

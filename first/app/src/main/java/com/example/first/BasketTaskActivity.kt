@@ -71,9 +71,11 @@ class BasketTaskActivity : AppCompatActivity() {
             val dateTask: String = date.getText().toString();
             val noteTask: String = note.getText().toString();
             val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, Data.basket[position].importance , Data.basket[position].urgency,  Data.basket[position].tag);
+            Data.taskColorMap[task] = Data.taskColorMap[Data.basket[position]]!!
             Data.basket[position] = task
             Data.tasks.add(Data.basket[position])
             Data.basket.removeAt(position)
+
             val intentToMain = Intent()
             setResult(Activity.RESULT_OK, intentToMain)
             finish()
