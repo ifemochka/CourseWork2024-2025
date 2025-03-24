@@ -20,10 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.first.Data.end
 import com.example.first.Data.start
 
-class Calendar : AppCompatActivity() {
+class Calendar : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+        startCheckingTime();
 
         val list: ImageView = findViewById(R.id.list)
 

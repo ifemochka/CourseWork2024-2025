@@ -110,7 +110,7 @@
     <EditText
         android:id="@+id/task_note"
         android:layout_width="200dp"
-        android:layout_height="100dp"
+        android:layout_height="50dp"
         android:layout_marginTop="220dp"
         android:ems="10"
         android:focusable="false"
@@ -160,11 +160,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_note" />
 
+
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginBottom="132dp"
         android:gravity="center_vertical"
         android:text="Нет"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
@@ -174,11 +175,9 @@
         android:id="@+id/switchYesNo"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="84dp"
+        android:layout_marginBottom="132dp"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
         app:layout_constraintEnd_toStartOf="@+id/textView" />
-
-
 
     <TextView
         android:gravity="center_vertical"
@@ -195,7 +194,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="76dp"
         android:gravity="center_vertical"
         android:text="Нет"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
@@ -217,15 +216,15 @@
         android:id="@+id/switchYesNo_urgency"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="76dp"
         app:layout_constraintBottom_toTopOf="@+id/task_ready"
         app:layout_constraintEnd_toStartOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="104dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="103dp"
         android:gravity="center_vertical"
         android:text="Да"
         app:layout_constraintEnd_toEndOf="parent"
@@ -241,5 +240,19 @@
         app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/task_time" />
+
+    <TextView
+        android:id="@+id/set"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="220dp"
+        android:shadowColor="#1E88E5"
+        android:text="Установить напоминание"
+        android:textColor="#1E88E5"
+        android:textColorLink="#3949AB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/task_note" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

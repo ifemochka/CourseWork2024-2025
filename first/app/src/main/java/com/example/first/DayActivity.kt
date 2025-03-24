@@ -13,16 +13,22 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class DayActivity : AppCompatActivity() {
+class DayActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_day)
+        startCheckingTime();
 
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+
+        var title : TextView = findViewById(R.id.main_label)
         tasksList = findViewById(R.id.tasksList)
         IfEmpty = findViewById(R.id.empty_label)
+        title.text = "Список задач на ${LocalDate.ofYearDay(2025, Data.selectedDay).format(dateFormatter)}"
 
         val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
 
@@ -58,9 +64,7 @@ class DayActivity : AppCompatActivity() {
         tasksList.adapter = TasksAdapter(orant, this)
 
     }
-    companion object {
-        const val REQUEST_CODE = 10
-    }
+
 }
 
 

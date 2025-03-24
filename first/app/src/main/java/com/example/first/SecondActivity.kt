@@ -3,6 +3,7 @@ package com.example.first
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -29,10 +30,13 @@ import android.widget.TextView
 import java.time.LocalDate
 import androidx.appcompat.app.AlertDialog
 
-class SecondActivity : AppCompatActivity() {
+class SecondActivity: BaseActivity() {
     private lateinit var time: TextView
     private lateinit var date: TextView
     private lateinit var note: TextView
+    lateinit var set_reminder: TextView
+    var chosen_time : LocalTime = LocalTime.of(9, 0)
+    lateinit var reminder_time : LocalTime
     var color: Int = Color.parseColor("#D6BAAFBA")
     lateinit var adapter : ArrayAdapter<String>
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -54,6 +58,13 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+        startCheckingTime();
+
+        set_reminder = findViewById(R.id.set)
+        set_reminder.setOnClickListener{
+            chosen_time =  LocalTime.parse(time.text, timeFormatter)
+            showReminderDialog(this);
+        }
 
         val name: EditText = findViewById(R.id.task_name)
         time = findViewById(R.id.task_time)
@@ -190,6 +201,7 @@ class SecondActivity : AppCompatActivity() {
                 val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, importanceTask, urgencyTask, tagTask);
                 Data.tasks.add(task)
                 Data.taskColorMap[task] = color
+                Data.localTimes.add(Pair(reminder_time, nameTask))
 
                 setResult(Activity.RESULT_OK, intentToMain)
                 finish()
@@ -197,6 +209,48 @@ class SecondActivity : AppCompatActivity() {
 
         }
     }
+
+    fun showReminderDialog(context: Context) {
+        // Опции по умолчанию
+        val options = arrayOf("За 10 минут", "За 1 час", "За 1 день", "Выбрать своё время")
+        val builder = android.app.AlertDialog.Builder(context)
+
+        builder.setTitle("Выберите время напоминания")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> reminder_time = chosen_time.minusMinutes(10) // 10 минут
+                    1 -> reminder_time = chosen_time.minusHours(1)
+                    2 -> reminder_time = chosen_time
+                    3 -> showTimePickerDialog(context)
+                }
+                if(which!= 3){
+                    setReminder()
+                }
+
+            }
+            .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
+
+        builder.create().show()
+
+    }
+
+    fun showTimePickerDialog(context: Context) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        // Создаем TimePickerDialog
+        val timePickerDialog = TimePickerDialog(context, { _, selectedHour, selectedMinute ->
+            reminder_time = LocalTime.of(selectedHour, selectedMinute)
+            setReminder()
+        }, hour, minute, true)
+        timePickerDialog.show()
+    }
+
+    fun setReminder() {
+        set_reminder.text = "Напоминание установлено на ${reminder_time}"
+    }
+
     private fun noteDialog(){
         val builder = AlertDialog.Builder(this)
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_note, null)

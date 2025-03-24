@@ -24,7 +24,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class BasketTaskActivity : AppCompatActivity() {
+class BasketTaskActivity : BaseActivity() {
 
     private lateinit var time : TextView
     private lateinit var date : TextView
@@ -37,6 +37,8 @@ class BasketTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_basket_task)
+
+        startCheckingTime();
 
 
         val name : TextView = findViewById(R.id.name)

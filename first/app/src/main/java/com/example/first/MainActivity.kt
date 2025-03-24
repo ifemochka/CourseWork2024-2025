@@ -14,7 +14,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
     private val sortOptions = arrayOf("Время", "Важность", "Срочность", "Текущие задачи")
@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        startCheckingTime();
         Data.currentTasks = Data.tasks
 
 
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        startCheckingTime();
         Data.currentTasks = Data.tasks
 
         if(Data.tasks.size != 0){
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume(){
         super.onResume()
+        startCheckingTime();
         Data.currentTasks = Data.tasks
         Data.currentTasks = Data.currentTasks
         if(Data.tasks.size != 0){
@@ -106,6 +109,14 @@ class MainActivity : AppCompatActivity() {
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
 
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
     }
 
     fun Reset(){

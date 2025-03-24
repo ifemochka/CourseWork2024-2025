@@ -14,13 +14,14 @@ import com.example.first.MainActivity.Companion.REQUEST_CODE
 import java.time.LocalDate
 import java.time.LocalTime
 
-class BasketActivity : AppCompatActivity() {
+class BasketActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
+        startCheckingTime();
 
 
         IfEmpty = findViewById(R.id.empty_label)

@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalTime
 
 import java.util.Calendar
-class Settings : AppCompatActivity() {
+class Settings : BaseActivity() {
 
     private lateinit var tvStartTime: TextView
     private lateinit var tvEndTime: TextView
@@ -28,6 +28,7 @@ class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        startCheckingTime();
         setContentView(R.layout.activity_settings)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)

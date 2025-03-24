@@ -26,7 +26,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
-class TaskActivity : AppCompatActivity() {
+class TaskActivity : BaseActivity() {
 
     private lateinit var time : TextView
     private lateinit var date : TextView
@@ -41,6 +41,7 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_task)
+        startCheckingTime();
 
 
         val name : TextView = findViewById(R.id.name)
