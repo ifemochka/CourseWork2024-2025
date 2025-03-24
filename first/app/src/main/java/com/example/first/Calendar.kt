@@ -72,4 +72,14 @@ class Calendar : BaseActivity() {
         val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
         recyclerView.adapter = adapter
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
 }

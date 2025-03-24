@@ -220,6 +220,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 val dateTextView = parent.findViewById<TextView>(R.id.date_text_view)
                 val date = dateTextView.text.toString()
                 Toast.makeText(context, "Задача '${(draggedView as TextView).text}' был перенесена $date", Toast.LENGTH_SHORT).show()
+                Data.moved++
 
 
                 val temp = Data.taskId[draggedView]!!

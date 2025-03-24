@@ -88,6 +88,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
 
 object Data {
+    var moved = 0
     val localTimes = mutableListOf<Pair<LocalTime, String>>()
     var tasks = arrayListOf<Task>()
     var currentTasks = arrayListOf<Task>()

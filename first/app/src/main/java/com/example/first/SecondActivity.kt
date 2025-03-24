@@ -36,7 +36,7 @@ class SecondActivity: BaseActivity() {
     private lateinit var note: TextView
     lateinit var set_reminder: TextView
     var chosen_time : LocalTime = LocalTime.of(9, 0)
-    lateinit var reminder_time : LocalTime
+    var reminder_time : LocalTime? = null
     var color: Int = Color.parseColor("#D6BAAFBA")
     lateinit var adapter : ArrayAdapter<String>
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -201,7 +201,8 @@ class SecondActivity: BaseActivity() {
                 val task = Task(nameTask, LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask, importanceTask, urgencyTask, tagTask);
                 Data.tasks.add(task)
                 Data.taskColorMap[task] = color
-                Data.localTimes.add(Pair(reminder_time, nameTask))
+                if (reminder_time != null){
+                Data.localTimes.add(Pair(reminder_time!!, nameTask))}
 
                 setResult(Activity.RESULT_OK, intentToMain)
                 finish()
@@ -349,6 +350,15 @@ class SecondActivity: BaseActivity() {
             cornerRadius = 10f
         }
         return drawable
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
     }
 
 }

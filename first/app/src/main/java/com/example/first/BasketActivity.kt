@@ -43,6 +43,14 @@ class BasketActivity : BaseActivity() {
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = BasketTasksAdapter(Data.basket,this)
     }
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
 
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
 
 }

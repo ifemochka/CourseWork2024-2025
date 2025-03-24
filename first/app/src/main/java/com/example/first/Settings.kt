@@ -79,6 +79,16 @@ class Settings : BaseActivity() {
 
         timePickerDialog.show()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
 }
 
 class CheckboxAdapter(private val context: Context, private val items: List<String>) :

@@ -3,6 +3,7 @@ package com.example.first
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -31,6 +32,7 @@ class TaskActivity : BaseActivity() {
     private lateinit var time : TextView
     private lateinit var date : TextView
     private lateinit var note : TextView
+    var position : Int = 0
     var tag : String = "Без тэга"
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
@@ -52,6 +54,7 @@ class TaskActivity : BaseActivity() {
         val urgency : TextView = findViewById(R.id.urgency)
         val endButton : Button = findViewById(R.id.end_button)
         val saveButton : Button = findViewById(R.id.save_button)
+        val moveButton : TextView = findViewById(R.id.move)
 
 
         name.text = intent.getStringExtra("nameTask")
@@ -68,7 +71,11 @@ class TaskActivity : BaseActivity() {
         spinner.adapter = adapter
         spinner.setSelection(Data.options.indexOf(tag))
 
-        var position : Int = intent.getIntExtra("position", 0)
+        position  = intent.getIntExtra("position", 0)
+
+        moveButton.setOnClickListener{
+            showReminderDialog(this)
+        }
 
         endButton.setOnClickListener{
             val intentToMain = Intent()
@@ -204,5 +211,40 @@ class TaskActivity : BaseActivity() {
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         // Показываем диалог
         datePickerDialog.show()
+    }
+
+    fun showReminderDialog(context: Context) {
+        // Опции по умолчанию
+        val options = arrayOf("На 1 час", "На 1 день", "На 1 неделю", "Выбрать своё время")
+        val builder = android.app.AlertDialog.Builder(context)
+
+        builder.setTitle("Выберите время напоминания")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> time.text = Data.currentTasks[position].time.plusHours(1).toString()
+                    1 -> date.text = Data.currentTasks[position].date.plusDays(1).format(dateFormatter)
+                    2 -> date.text = Data.currentTasks[position].date.plusDays(7).format(dateFormatter)
+                    3 -> showDatePickerDialog()
+                }
+                Data.moved++
+
+            }
+            .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
+
+        builder.create().show()
+
+    }
+
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
     }
 }

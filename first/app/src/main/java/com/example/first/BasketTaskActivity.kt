@@ -179,5 +179,15 @@ class BasketTaskActivity : BaseActivity() {
         // Показываем диалог
         datePickerDialog.show()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacksAndMessages(null)
+    }
 }
 
