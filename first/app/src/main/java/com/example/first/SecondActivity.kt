@@ -31,6 +31,7 @@ import java.time.LocalDate
 import androidx.appcompat.app.AlertDialog
 
 class SecondActivity: BaseActivity() {
+
     private lateinit var time: TextView
     private lateinit var date: TextView
     private lateinit var note: TextView
@@ -61,10 +62,7 @@ class SecondActivity: BaseActivity() {
         startCheckingTime();
 
         set_reminder = findViewById(R.id.set)
-        set_reminder.setOnClickListener{
-            chosen_time =  LocalTime.parse(time.text, timeFormatter)
-            showReminderDialog(this);
-        }
+
 
         val name: EditText = findViewById(R.id.task_name)
         time = findViewById(R.id.task_time)
@@ -114,6 +112,16 @@ class SecondActivity: BaseActivity() {
         adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Data.options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
+
+        set_reminder.setOnClickListener{
+            if(name.getText().toString() == "" || time.getText().toString() == "" || date.getText().toString() == ""){
+                Toast.makeText(this, "Not all values", Toast.LENGTH_SHORT).show()
+
+            } else {
+                chosen_time =  LocalTime.parse(time.text, timeFormatter)
+                showReminderDialog(this);
+            }
+        }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -192,7 +200,7 @@ class SecondActivity: BaseActivity() {
 
 
             if(nameTask == "" || timeTask == "" || dateTask == ""){
-                Toast.makeText(this, "Not all values", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Not all values", Toast.LENGTH_SHORT).show()
 
             }
             else{

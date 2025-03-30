@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Parcel
 import android.os.Parcelable
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -77,7 +78,19 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        val inflater = layoutInflater
+        // Создаем View на основе кастомной разметки
+        val layout: View = inflater.inflate(R.layout.custom_toast, null)
+
+        // Находим TextView в кастомном макете
+        val toastText: TextView = layout.findViewById(R.id.toast_text)
+        toastText.text = message  // Устанавливаем текст
+
+        // Создаем Toast
+        val toast = Toast(applicationContext)
+        toast.duration = Toast.LENGTH_SHORT
+        toast.view = layout  // Устанавливаем кастомный макет
+        toast.show()  // Показываем Toast
     }
     override fun onDestroy() {
         super.onDestroy()
@@ -102,4 +115,6 @@ object Data {
     var end : LocalTime = LocalTime.of(17, 0)
     var hoursInDay = end.hour - start.hour
     val weekBool: MutableList<Boolean> = mutableListOf(true, true, true, true, true, false, false)
+    val labels =  arrayListOf<String>("31.03", "07.04", "14.04", "21.04", "28.04", "05.05")
+    val tasksInWeeks = mutableListOf(0, 0, 0, 0, 0,0)
 }

@@ -25,6 +25,7 @@ import com.example.first.MainActivity.Companion.REQUEST_CODE
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
 class TaskActivity : BaseActivity() {
@@ -78,9 +79,19 @@ class TaskActivity : BaseActivity() {
         }
 
         endButton.setOnClickListener{
+
+            val daysBetween = ChronoUnit.DAYS.between( LocalDate.of(2025, 3, 31), Data.currentTasks[position].date)
+
+            Data.tasksInWeeks[(daysBetween%7).toInt()]++;
+
             val intentToMain = Intent()
+
+
+
             Data.basket.add(Data.currentTasks[position])
             Data.tasks.removeAt(Data.tasks.indexOf(Data.currentTasks[position]))
+
+
 
             setResult(Activity.RESULT_OK, intentToMain)
             finish()
@@ -116,10 +127,6 @@ class TaskActivity : BaseActivity() {
         note.setOnClickListener{
             noteDialog()
         }
-
-
-
-
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -215,10 +222,10 @@ class TaskActivity : BaseActivity() {
 
     fun showReminderDialog(context: Context) {
         // Опции по умолчанию
-        val options = arrayOf("На 1 час", "На 1 день", "На 1 неделю", "Выбрать своё время")
+        val options = arrayOf("На 1 час", "На 1 день", "На 1 неделю", "Произовольно")
         val builder = android.app.AlertDialog.Builder(context)
 
-        builder.setTitle("Выберите время напоминания")
+        builder.setTitle("Задачу перенести на")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> time.text = Data.currentTasks[position].time.plusHours(1).toString()

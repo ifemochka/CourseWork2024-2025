@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter
 
 class MainActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
-    private lateinit var completedAndMoved : TextView
     private lateinit var tasksList : RecyclerView
     private val sortOptions = arrayOf("Время", "Важность", "Срочность", "Текущие задачи")
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
@@ -32,9 +31,9 @@ class MainActivity : BaseActivity() {
 
         val basketButton: ImageView = findViewById(R.id.basketButton)
         val calendarButton: ImageView = findViewById(R.id.calendar)
+        val profileButton: ImageView = findViewById(R.id.profile)
 
-        completedAndMoved = findViewById(R.id.completedAndMoved)
-        completedAndMoved.text = "Выполнено задач: ${Data.basket.size}. Перенесено задач: ${Data.moved}"
+
         tasksList = findViewById(R.id.tasksList)
         IfEmpty = findViewById(R.id.empty_label)
         if(Data.tasks.size != 0){
@@ -60,6 +59,11 @@ class MainActivity : BaseActivity() {
 
         filterButton.setOnClickListener {
             showOptionsDialog(Data.options.toTypedArray().copyOfRange(0, Data.options.size-1))
+        }
+
+        profileButton.setOnClickListener {
+            val intent = Intent(this, StatisticActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -94,7 +98,6 @@ class MainActivity : BaseActivity() {
         if(Data.tasks.size != 0){
             IfEmpty.text = "";
         }
-        completedAndMoved.text = "Выполнено задач: ${Data.basket.size}. Перенесено задач: ${Data.moved}"
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
     }
@@ -110,7 +113,6 @@ class MainActivity : BaseActivity() {
         else{
             IfEmpty.text = "Задач пока нет"
         }
-        completedAndMoved.text = "Выполнено задач: ${Data.basket.size}. Перенесено задач: ${Data.moved}"
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
 
@@ -128,7 +130,6 @@ class MainActivity : BaseActivity() {
 
     fun Reset(){
         Data.currentTasks = Data.tasks
-        completedAndMoved.text = "Выполнено задач: ${Data.basket.size}. Перенесено задач: ${Data.moved}"
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
     }

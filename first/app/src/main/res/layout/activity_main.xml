@@ -80,6 +80,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/profile"
+        android:layout_width="91dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="76dp"
+        android:layout_marginEnd="304dp"
+        android:src="@drawable/account_circle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@android:color/darker_gray" />
+
     <TextView
         android:id="@+id/empty_label"
         android:layout_width="wrap_content"
@@ -140,17 +151,7 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/completedAndMoved"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text=""
-        android:textSize="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_label" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

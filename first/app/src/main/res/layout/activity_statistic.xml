@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/completedAndMoved"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="158dp"
+        android:text="TEXT"
+        android:textSize="15dp" />
+
+    <HorizontalScrollView
+        android:layout_width="338dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="34dp"
+        android:layout_marginBottom="123dp"
+        android:fillViewport="true">
+
+        <com.example.first.BarChartView
+            android:id="@+id/barChartView"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp" />
+
+    </HorizontalScrollView>
+
+
+</RelativeLayout>
