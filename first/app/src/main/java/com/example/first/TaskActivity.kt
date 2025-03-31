@@ -81,8 +81,10 @@ class TaskActivity : BaseActivity() {
         endButton.setOnClickListener{
 
             val daysBetween = ChronoUnit.DAYS.between( LocalDate.of(2025, 3, 31), Data.currentTasks[position].date)
+            Toast.makeText(this, "${daysBetween}", Toast.LENGTH_SHORT).show()
 
-            Data.tasksInWeeks[(daysBetween%7).toInt()]++;
+
+            Data.tasksInWeeks[(daysBetween/7).toInt()]++;
 
             val intentToMain = Intent()
 

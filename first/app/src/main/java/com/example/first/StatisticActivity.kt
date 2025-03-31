@@ -8,7 +8,10 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import kotlin.math.exp
+import kotlin.math.round
 
 
 class StatisticActivity : AppCompatActivity() {
@@ -18,6 +21,10 @@ class StatisticActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistic)
+
+        var scoreTV : TextView = findViewById(R.id.score)
+
+
 
         mAndC = findViewById(R.id.completedAndMoved)
 
@@ -31,6 +38,22 @@ class StatisticActivity : AppCompatActivity() {
 
 
         barChartView.setData(data)
+
+        Data.score = 0
+
+        for(i in 0 until 1){
+            Toast.makeText(this, "${i} и ${Data.tasksInWeeks[i]}", Toast.LENGTH_SHORT).show()
+            if (Data.tasksInWeeks[i]!=0) {
+                val result = exp((Data.tasksInWeeks[i].toDouble() / 2)) / 10 + 1
+                Data.score += round(result).toInt()
+            }
+            else{
+                if (Data.score>0){
+                    Data.score--;
+                }
+            }
+        }
+        scoreTV.text = "Ваш счёт: ${Data.score}"
     }
 }
 class BarChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {

@@ -117,4 +117,5 @@ object Data {
     val weekBool: MutableList<Boolean> = mutableListOf(true, true, true, true, true, false, false)
     val labels =  arrayListOf<String>("31.03", "07.04", "14.04", "21.04", "28.04", "05.05")
     val tasksInWeeks = mutableListOf(0, 0, 0, 0, 0,0)
+    var score = 0
 }

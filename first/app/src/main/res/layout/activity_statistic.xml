@@ -2,6 +2,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="158dp"
+        android:text="TEXT"
+        android:textSize="15dp" />
+
     <TextView
         android:id="@+id/completedAndMoved"
         android:layout_width="212dp"
@@ -10,7 +24,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="117dp"
         android:layout_marginEnd="158dp"
         android:text="TEXT"
         android:textSize="15dp" />
