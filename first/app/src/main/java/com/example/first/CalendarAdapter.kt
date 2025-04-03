@@ -1,13 +1,14 @@
 package com.example.first
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.text.TextUtils
-import android.util.Log
 import android.view.DragEvent
 import android.view.GestureDetector
 import android.view.Gravity
@@ -20,27 +21,20 @@ import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
-import java.util.Locale
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  private val context: Context) : RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
-
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
     val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val dateTextView: TextView = view.findViewById(R.id.date_text_view)
         val tasksContainer: RelativeLayout = view.findViewById(R.id.tasks_container)
-
     }
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_view, parent, false)
@@ -51,10 +45,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
 
         val (date, tasks) = items[position]
 
-        // Устанавливаем текст даты
         holder.dateTextView.text = LocalDate.ofYearDay(2025, position+Data.currentDay).format(dateFormatter)
-        //val dayOfWeek = (LocalDate.ofYearDay(2025, position+Data.currentDay).dayOfWeek).value % 7
-
 
         holder.tasksContainer.setOnDragListener(dragListener)
 
@@ -82,9 +73,10 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         48.dpToPx(holder.itemView.context)
                     ).apply {
-                        topMargin = (topMarginDp * resources.displayMetrics.density).toInt() // Конвертация dp в px
+                        topMargin = (topMarginDp * resources.displayMetrics.density).toInt()
                     }
                 }
+
                 holder.tasksContainer.addView(taskTextView)
                 Data.taskId[taskTextView] = task
                 setupGestureDetector(taskTextView)
@@ -96,10 +88,9 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
         holder.tasksContainer.setBackgroundResource(R.drawable.rounded_background)
 
         if(Data.weekBool[((LocalDate.ofYearDay(2025, position+Data.currentDay - 1)).dayOfWeek.value % 7)]){
-            //holder.tasksContainer.setBackgroundColor(Color.parseColor("#E3F1FF"))
             val drawable = GradientDrawable()
-            drawable.cornerRadius = 46f // Установите радиус закругления
-            drawable.setColor(Color.parseColor("#E3F1FF")) // Цвет фона
+            drawable.cornerRadius = 46f
+            drawable.setColor(Color.parseColor("#E3F1FF"))
 
             holder.tasksContainer.background = drawable
         }
@@ -120,8 +111,8 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
     }
 
     private fun createHorizontalStrips(parent: RelativeLayout) {
-        val stripHeight = 1.5 // высота полоски в dp
-        val stripCount = Data.hoursInDay // количество полосок (500dp / 100dp)
+        val stripHeight = 1.5
+        val stripCount = Data.hoursInDay
         val time = Data.start.hour
 
         for (i in 0 until stripCount) {
@@ -130,22 +121,21 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                     RelativeLayout.LayoutParams.MATCH_PARENT,
                     (stripHeight * resources.displayMetrics.density).toInt()
                 ).apply {
-                    topMargin = (i * (720/Data.hoursInDay) * resources.displayMetrics.density).toInt() // каждая полоска через 100dp
+                    topMargin = (i * (720/Data.hoursInDay) * resources.displayMetrics.density).toInt()
                 }
-                setBackgroundColor(Color.LTGRAY) // цвет полоски
+                setBackgroundColor(Color.LTGRAY)
             }
 
-            // Создание TextView для подписи полоски
             if(i%1 == 0){
                 val label = TextView(context).apply {
-                    text = (time + i).toString() + ":00"// Подпись номером полоски
+                    text = (time + i).toString() + ":00"
                     setTextColor(Color.DKGRAY)
                     layoutParams = RelativeLayout.LayoutParams(
                         RelativeLayout.LayoutParams.WRAP_CONTENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
-                        topMargin = (i * (720/Data.hoursInDay) * resources.displayMetrics.density).toInt() // совпадает с верхним отступом полоски
-                        leftMargin = 160 // Отступ слева для текста
+                        topMargin = (i * (720/Data.hoursInDay) * resources.displayMetrics.density).toInt()
+                        leftMargin = 160
                     }
                 }
                 parent.addView(label)
@@ -155,12 +145,11 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupGestureDetector(view: TextView) {
         val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent): Boolean {
                 val intent = Intent(context, TaskActivity::class.java)
-
-
 
                 val task = Data.taskId[view]!!
                 Data.currentTasks = arrayListOf<Task> (task)
@@ -173,17 +162,16 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 intent.putExtra("tagTask", task.tag)
 
                 if (context is Activity) {
-                    (context as Activity).startActivityForResult(intent, 1)
+                    context.startActivityForResult(intent, 1)
                 }
                 return true
             }
 
             override fun onLongPress(e: MotionEvent) {
-                // Обработка долгого нажатия для начала перетаскивания
                 val data = ClipData.newPlainText("", "")
                 val shadowBuilder = View.DragShadowBuilder(view)
                 view.startDragAndDrop(data, shadowBuilder, view, 0)
-                view.visibility = View.INVISIBLE // Скрыть во время перетаскивания
+                view.visibility = View.INVISIBLE
             }
         })
 
@@ -205,18 +193,11 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 val container = v as RelativeLayout
                 val dropY = event.y
 
-
-                // Получаем родительский LinearLayout
                 val parent = container.parent.parent as LinearLayout
 
-                //Toast.makeText(context, " ${parent::class.simpleName}", Toast.LENGTH_SHORT).show()
-
-
                 val scrollView = container.parent as ScrollView
-                // Получаем позицию контейнера в адаптере
                 val position = parent.indexOfChild(scrollView)
 
-                // Получаем дату из dateTextView в родительском LinearLayout
                 val dateTextView = parent.findViewById<TextView>(R.id.date_text_view)
                 val date = dateTextView.text.toString()
                 Toast.makeText(context, "Задача '${(draggedView as TextView).text}' был перенесена $date", Toast.LENGTH_SHORT).show()
@@ -230,7 +211,6 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 val minutes = time % 60
 
                 val formattedTime = LocalTime.of(hours, minutes)
-                //Toast.makeText(context, "${formattedTime}", Toast.LENGTH_SHORT).show()
 
                 Data.tasks[index] = Task(temp.name, formattedTime, LocalDate.parse(date, dateFormatter), temp.note, temp.importance, temp.urgency, temp.tag)
                 Data.taskId[draggedView] = Data.tasks[index]

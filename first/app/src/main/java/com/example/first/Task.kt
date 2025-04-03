@@ -1,12 +1,11 @@
 package com.example.first
 
-import android.os.Bundle
+import android.os.Build
 import android.os.Handler
-import android.os.Parcel
-import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import java.time.LocalDate
 import java.time.LocalTime
@@ -14,8 +13,8 @@ import java.time.LocalTime
 import java.io.Serializable
 import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 class Task(
-
     val name: String,
     private val timeString: String,
     private val dateString: String,
@@ -39,11 +38,8 @@ class Task(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 abstract class BaseActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     val handler = Handler()
     private val checkInterval: Long = 60000 // 60 секунд
@@ -99,7 +95,7 @@ abstract class BaseActivity : AppCompatActivity() {
 }
 
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 object Data {
     var moved = 0
     val localTimes = mutableListOf<Pair<LocalTime, String>>()

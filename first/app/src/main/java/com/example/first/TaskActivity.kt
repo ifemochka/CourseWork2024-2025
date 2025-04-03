@@ -1,11 +1,13 @@
 package com.example.first
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,26 +19,24 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.first.MainActivity.Companion.REQUEST_CODE
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 
+@RequiresApi(Build.VERSION_CODES.O)
 class TaskActivity : BaseActivity() {
 
     private lateinit var time : TextView
     private lateinit var date : TextView
     private lateinit var note : TextView
-    var position : Int = 0
+    private var position : Int = 0
     var tag : String = "Без тэга"
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
     lateinit var adapter : ArrayAdapter<String>
     var color: Int = Color.parseColor("#D6BAAFBA")
 
@@ -45,7 +45,6 @@ class TaskActivity : BaseActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_task)
         startCheckingTime();
-
 
         val name : TextView = findViewById(R.id.name)
         time = findViewById(R.id.time)
@@ -56,23 +55,21 @@ class TaskActivity : BaseActivity() {
         val endButton : Button = findViewById(R.id.end_button)
         val saveButton : Button = findViewById(R.id.save_button)
         val moveButton : TextView = findViewById(R.id.move)
-
+        val spinner: Spinner = findViewById(R.id.spinner)
 
         name.text = intent.getStringExtra("nameTask")
         time.text = intent.getStringExtra("timeTask")
         date.text = intent.getStringExtra("dateTask")
         note.text = intent.getStringExtra("noteTask")
-        importance.text =  if (intent.getBooleanExtra("importanceTask", false) == true) "Да" else "Нет"
-        urgency.text =  if (intent.getBooleanExtra("urgencyTask", false) == true) "Да" else "Нет"
+        importance.text =  if (intent.getBooleanExtra("importanceTask", false)) "Да" else "Нет"
+        urgency.text =  if (intent.getBooleanExtra("urgencyTask", false)) "Да" else "Нет"
         tag = intent.getStringExtra("tagTask").toString()
+        position  = intent.getIntExtra("position", 0)
 
-        val spinner: Spinner = findViewById(R.id.spinner)
         adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, Data.options)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.setSelection(Data.options.indexOf(tag))
-
-        position  = intent.getIntExtra("position", 0)
 
         moveButton.setOnClickListener{
             showReminderDialog(this)
@@ -81,19 +78,14 @@ class TaskActivity : BaseActivity() {
         endButton.setOnClickListener{
 
             val daysBetween = ChronoUnit.DAYS.between( LocalDate.of(2025, 3, 31), Data.currentTasks[position].date)
-            Toast.makeText(this, "${daysBetween}", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(this, "$daysBetween", Toast.LENGTH_SHORT).show()
 
             Data.tasksInWeeks[(daysBetween/7).toInt()]++;
 
             val intentToMain = Intent()
 
-
-
             Data.basket.add(Data.currentTasks[position])
             Data.tasks.removeAt(Data.tasks.indexOf(Data.currentTasks[position]))
-
-
 
             setResult(Activity.RESULT_OK, intentToMain)
             finish()
@@ -106,7 +98,6 @@ class TaskActivity : BaseActivity() {
             val noteTask: String = note.getText().toString();
             if(nameTask == "" || timeTask == ""){
                 Toast.makeText(this, "Not all values", Toast.LENGTH_LONG).show()
-
             }
             else{
                 val intentToMain = Intent()
@@ -130,7 +121,6 @@ class TaskActivity : BaseActivity() {
             noteDialog()
         }
 
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 if (Data.options[position] == "+ Добавить тэг"){
@@ -142,7 +132,6 @@ class TaskActivity : BaseActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
-
 
         }
     }
@@ -158,10 +147,10 @@ class TaskActivity : BaseActivity() {
 
         builder.setView(dialogView)
             .setTitle("Заметка")
-            .setPositiveButton("Сохранить") { dialog, which ->
+            .setPositiveButton("Сохранить") { _, _ ->
                 note.text = editNote.text.toString()
             }
-            .setNegativeButton("Отмена") { dialog, which ->
+            .setNegativeButton("Отмена") { dialog, _ ->
                 dialog.cancel()
             }
 
@@ -175,7 +164,7 @@ class TaskActivity : BaseActivity() {
         val input = EditText(this)
         builder.setView(input)
 
-        builder.setPositiveButton("OK") { dialog, which ->
+        builder.setPositiveButton("OK") { _, _ ->
             val userInput = input.text.toString()
             Data.options[Data.options.size - 1] = userInput
             Data.options.add("+ Добавить тэг")
@@ -183,52 +172,46 @@ class TaskActivity : BaseActivity() {
             tag = userInput
 
         }
-        builder.setNegativeButton("Отмена") { dialog, which -> dialog.cancel() }
+        builder.setNegativeButton("Отмена") { dialog, _ -> dialog.cancel() }
 
         builder.show()
     }
 
+    @SuppressLint("DefaultLocale")
     private fun showTimePickerDialog() {
-        // Получаем текущее время
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        // Создаем TimePickerDialog
         val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
-            // Обновляем TextView с выбранным временем
             time.text = String.format("%02d:%02d", selectedHour, selectedMinute)
-        }, hour, minute, true) // true - 24-часовой формат
+        }, hour, minute, true)
 
-        // Показываем диалог
         timePickerDialog.show()
     }
+
+    @SuppressLint("DefaultLocale")
     private fun showDatePickerDialog() {
-        // Получаем текущую дату
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        // Создаем DatePickerDialog
         val datePickerDialog = DatePickerDialog(this,
             { _, selectedYear, selectedMonth, selectedDay ->
-                // Обновляем текстовое поле с выбранной датой
                 date.text = String.format("%02d.%02d.%d", selectedDay, selectedMonth + 1, selectedYear)
             }, year, month, day)
 
-        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        // Показываем диалог
+        datePickerDialog.datePicker.minDate = calendar.getTimeInMillis();
         datePickerDialog.show()
     }
 
-    fun showReminderDialog(context: Context) {
-        // Опции по умолчанию
+    private fun showReminderDialog(context: Context) {
         val options = arrayOf("На 1 час", "На 1 день", "На 1 неделю", "Произовольно")
         val builder = android.app.AlertDialog.Builder(context)
 
         builder.setTitle("Задачу перенести на")
-            .setItems(options) { dialog, which ->
+            .setItems(options) { _, which ->
                 when (which) {
                     0 -> time.text = Data.currentTasks[position].time.plusHours(1).toString()
                     1 -> date.text = Data.currentTasks[position].date.plusDays(1).format(dateFormatter)
@@ -236,16 +219,12 @@ class TaskActivity : BaseActivity() {
                     3 -> showDatePickerDialog()
                 }
                 Data.moved++
-
             }
             .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
 
         builder.create().show()
 
     }
-
-
-
 
     override fun onDestroy() {
         super.onDestroy()

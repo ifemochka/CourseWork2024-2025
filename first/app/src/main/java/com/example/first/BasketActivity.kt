@@ -1,19 +1,14 @@
 package com.example.first
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.first.MainActivity.Companion.REQUEST_CODE
-import java.time.LocalDate
-import java.time.LocalTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 class BasketActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList: RecyclerView
@@ -22,7 +17,6 @@ class BasketActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_basket)
         startCheckingTime();
-
 
         IfEmpty = findViewById(R.id.empty_label)
         tasksList = findViewById(R.id.tasksList)
@@ -43,6 +37,7 @@ class BasketActivity : BaseActivity() {
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = BasketTasksAdapter(Data.basket,this)
     }
+
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
@@ -52,5 +47,4 @@ class BasketActivity : BaseActivity() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
     }
-
 }

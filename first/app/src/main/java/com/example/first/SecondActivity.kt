@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,11 +28,13 @@ import java.util.Calendar
 
 
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import java.time.LocalDate
 import androidx.appcompat.app.AlertDialog
 
-class SecondActivity: BaseActivity() {
 
+@RequiresApi(Build.VERSION_CODES.O)
+class SecondActivity: BaseActivity() {
     private lateinit var time: TextView
     private lateinit var date: TextView
     private lateinit var note: TextView

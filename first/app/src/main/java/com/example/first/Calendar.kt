@@ -1,25 +1,15 @@
 package com.example.first
 
-import android.content.ClipData
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.os.Bundle
-import android.view.DragEvent
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.first.Data.end
-import com.example.first.Data.start
 
+@RequiresApi(Build.VERSION_CODES.O)
 class Calendar : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +30,10 @@ class Calendar : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         ResetCalendar()
     }
+
     override fun onResume(){
         super.onResume()
         ResetCalendar()
-
     }
 
     private fun ResetCalendar() {
@@ -65,9 +55,9 @@ class Calendar : BaseActivity() {
             calendar[index].second.add(task)
             Data.taskColorMap[task] = color
         }
+
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-
 
         val adapter = CalendarAdapter(calendar.subList(Data.currentDay-1, Data.currentDay+30), this)
         recyclerView.adapter = adapter

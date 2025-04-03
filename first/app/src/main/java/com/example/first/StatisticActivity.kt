@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlin.math.exp
 import kotlin.math.round
@@ -22,28 +21,20 @@ class StatisticActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_statistic)
 
-        var scoreTV : TextView = findViewById(R.id.score)
-
-
-
         mAndC = findViewById(R.id.completedAndMoved)
-
         mAndC.text = "Выполнено задач: ${Data.basket.size}. Перенесено задач: ${Data.moved}"
 
         val barChartView = findViewById<BarChartView>(R.id.barChartView)
 
-
-        // Пример данных для диаграммы
         var data = Data.tasksInWeeks.toIntArray()
+        if (Data.basket.size > 0) {
+            barChartView.setData(data)
+        }
 
-
-        barChartView.setData(data)
-
+        var scoreTV : TextView = findViewById(R.id.score)
         Data.score = 0
-
         for(i in 0 until 1){
-            Toast.makeText(this, "${i} и ${Data.tasksInWeeks[i]}", Toast.LENGTH_SHORT).show()
-            if (Data.tasksInWeeks[i]!=0) {
+             if (Data.tasksInWeeks[i]!=0) {
                 val result = exp((Data.tasksInWeeks[i].toDouble() / 2)) / 10 + 1
                 Data.score += round(result).toInt()
             }
@@ -56,6 +47,7 @@ class StatisticActivity : AppCompatActivity() {
         scoreTV.text = "Ваш счёт: ${Data.score}"
     }
 }
+
 class BarChartView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val paint = Paint()
@@ -63,7 +55,6 @@ class BarChartView(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     val labels = Data.labels
 
-    // Фиксированная ширина столбиков
     private val fixedBarWidth = 150f
 
     fun setData(data: IntArray) {
@@ -84,22 +75,19 @@ class BarChartView(context: Context, attrs: AttributeSet) : View(context, attrs)
         paint.strokeWidth = 5f
         canvas.drawLine(30f, height - 100f, width+30f, height - 100f, paint) // X-axis
 
-        // Рисуем столбики
         for (i in data.indices) {
             val barHeight = (height - 150) * (data[i].toFloat() / maxValue)
-            val left = i * fixedBarWidth + 30f // Используем фиксированную ширину
+            val left = i * fixedBarWidth + 30f
             val right = left + fixedBarWidth
             val top = height - 100 - barHeight
 
             paint.color = Color.parseColor("#1E88E5")
             canvas.drawRect(left, top, right, height - 100f, paint)
 
-            // Пишем значения на столбиках
             paint.color = Color.BLACK
             paint.textSize = 40f
             canvas.drawText(data[i].toString(), left + fixedBarWidth / 2, top - 10, paint)
 
-            // Подписи по оси X
             paint.color = Color.BLACK
             paint.textSize = 35f
             canvas.drawText(labels[i], left-30f, height - 65f, paint)

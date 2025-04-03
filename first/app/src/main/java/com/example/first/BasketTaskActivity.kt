@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -14,16 +15,14 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.first.MainActivity.Companion.REQUEST_CODE
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
+@RequiresApi(Build.VERSION_CODES.O)
 class BasketTaskActivity : BaseActivity() {
 
     private lateinit var time : TextView
@@ -39,7 +38,6 @@ class BasketTaskActivity : BaseActivity() {
         setContentView(R.layout.activity_basket_task)
 
         startCheckingTime();
-
 
         val name : TextView = findViewById(R.id.name)
         time = findViewById(R.id.time)
@@ -147,18 +145,14 @@ class BasketTaskActivity : BaseActivity() {
     }
 
     private fun showTimePickerDialog() {
-        // Получаем текущее время
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
 
-        // Создаем TimePickerDialog
         val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
-            // Обновляем TextView с выбранным временем
             time.text = String.format("%02d:%02d", selectedHour, selectedMinute)
-        }, hour, minute, true) // true - 24-часовой формат
+        }, hour, minute, true)
 
-        // Показываем диалог
         timePickerDialog.show()
     }
     private fun showDatePickerDialog() {
@@ -171,12 +165,10 @@ class BasketTaskActivity : BaseActivity() {
         // Создаем DatePickerDialog
         val datePickerDialog = DatePickerDialog(this,
             { _, selectedYear, selectedMonth, selectedDay ->
-                // Обновляем текстовое поле с выбранной датой
                 date.text = String.format("%02d.%02d.%d", selectedDay, selectedMonth + 1, selectedYear)
             }, year, month, day)
 
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        // Показываем диалог
         datePickerDialog.show()
     }
 

@@ -1,18 +1,16 @@
 package com.example.first
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.time.LocalTime
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class DayActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
@@ -54,15 +52,14 @@ class DayActivity : BaseActivity() {
 
     override fun onResume(){
         super.onResume()
-        val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+        val dayTasks = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
 
-        if(orant.size != 0){
+        if(dayTasks.size != 0){
             IfEmpty.text = "";
         }
 
         tasksList.layoutManager = LinearLayoutManager(this)
-        tasksList.adapter = TasksAdapter(orant, this)
-
+        tasksList.adapter = TasksAdapter(dayTasks, this)
     }
 
     override fun onDestroy() {
@@ -74,7 +71,6 @@ class DayActivity : BaseActivity() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
     }
-
 }
 
 

@@ -1,19 +1,16 @@
 package com.example.first
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
-import android.text.InputType
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 class OptionsDialogFragment : DialogFragment() {
 
-    // Метод для создания нового экземпляра фрагмента с передачей аргументов
     companion object {
         private const val ARG_OPTIONS = "options"
 
@@ -27,10 +24,8 @@ class OptionsDialogFragment : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Получаем массив опций из аргументов
         val options = arguments?.getStringArray(ARG_OPTIONS) ?: arrayOf()
 
-        // Создание AlertDialog с использованием Builder
         val builder = AlertDialog.Builder(requireActivity())
         var title : String = "Выбрать задачи:"
         if (options.size == 2){
@@ -38,13 +33,10 @@ class OptionsDialogFragment : DialogFragment() {
         }
         builder.setTitle(title)
             .setItems(options) { dialog, which ->
-                // Обработка выбора опции
                 val selectedOption = options[which]
-                // Передача выбранной опции обратно в MainActivity
                 (activity as MainActivity).onOptionSelected(selectedOption)
             }
             .setNegativeButton("Отмена") { dialog, id ->
-                // Закрытие диалога при нажатии кнопки Отмена
                 dialog.dismiss()
             }
 

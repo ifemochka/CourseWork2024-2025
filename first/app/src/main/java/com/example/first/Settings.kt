@@ -2,6 +2,7 @@ package com.example.first
 
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,21 +11,21 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalTime
 
 import java.util.Calendar
+
+@RequiresApi(Build.VERSION_CODES.O)
 class Settings : BaseActivity() {
 
     private lateinit var tvStartTime: TextView
     private lateinit var tvEndTime: TextView
-    private var startTimeInMillis: Long = 0
-
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CheckboxAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -65,12 +66,10 @@ class Settings : BaseActivity() {
                 tvStartTime.text = String.format("%02d:00", selectedHour)
                 Data.start = LocalTime.of(selectedHour, 0)
             } else {
-                // Устанавливаем время окончания только если оно больше времени начала
                 if (selectedHour > Data.start.hour) {
                     tvEndTime.text = String.format("%02d:00", selectedHour)
                     Data.end = LocalTime.of(selectedHour, 0)
                 } else {
-                    // Здесь можно добавить сообщение о том, что конечное время должно быть больше начального
                     tvEndTime.text = "23:00"
                     Data.end = LocalTime.of(23, 0)
                 }

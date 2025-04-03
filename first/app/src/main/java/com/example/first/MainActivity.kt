@@ -1,51 +1,45 @@
 package com.example.first
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.time.LocalTime
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : BaseActivity() {
     private lateinit var IfEmpty : TextView
     private lateinit var tasksList : RecyclerView
     private val sortOptions = arrayOf("Время", "Важность", "Срочность", "Текущие задачи")
-    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-    val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        startCheckingTime();
-        Data.currentTasks = Data.tasks
 
+        startCheckingTime();
+
+        Data.currentTasks = Data.tasks
 
         val basketButton: ImageView = findViewById(R.id.basketButton)
         val calendarButton: ImageView = findViewById(R.id.calendar)
         val profileButton: ImageView = findViewById(R.id.profile)
-
-
-        tasksList = findViewById(R.id.tasksList)
-        IfEmpty = findViewById(R.id.empty_label)
-        if(Data.tasks.size != 0){
-            IfEmpty.text = "";
-        }
         val reset : TextView = findViewById(R.id.reset)
         val newButton: Button = findViewById(R.id.new_button)
         val filterButton: ImageView  = findViewById(R.id.filter_button)
         val sortButton: ImageView  = findViewById(R.id.sort_button)
         val settingsButton: ImageView = findViewById(R.id.settings)
 
-
+        tasksList = findViewById(R.id.tasksList)
+        IfEmpty = findViewById(R.id.empty_label)
+        if(Data.tasks.size != 0){
+            IfEmpty.text = "";
+        }
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
 
@@ -65,7 +59,6 @@ class MainActivity : BaseActivity() {
             val intent = Intent(this, StatisticActivity::class.java)
             startActivity(intent)
         }
-
 
         newButton.setOnClickListener{
             val intentToSecond = Intent(this, SecondActivity::class.java)
@@ -89,10 +82,11 @@ class MainActivity : BaseActivity() {
 
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         startCheckingTime();
+
         Data.currentTasks = Data.tasks
 
         if(Data.tasks.size != 0){
@@ -130,10 +124,10 @@ class MainActivity : BaseActivity() {
 
     fun Reset(){
         Data.currentTasks = Data.tasks
+
         tasksList.layoutManager = LinearLayoutManager(this)
         tasksList.adapter = TasksAdapter(Data.tasks,this)
     }
-
 
     private fun showOptionsDialog(list: Array<String>) {
         val dialog = OptionsDialogFragment.newInstance(list)
@@ -168,7 +162,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    fun filterTasks(tasks: List<Task>): List<Task> {
+    private fun filterTasks(tasks: List<Task>): List<Task> {
         val currentDate = LocalDate.now()
         val currentTime = LocalTime.now()
 
@@ -176,7 +170,6 @@ class MainActivity : BaseActivity() {
             task.date > currentDate || (task.date == currentDate && task.time > currentTime.minusMinutes(1) )
         }
     }
-
 
     companion object {
         const val REQUEST_CODE = 10
