@@ -63,7 +63,7 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
             }
         }
         holder.taskTag.text = tasks[position].tag
-        holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
+        holder.taskTime.text = tasks[position].date().format(dateFormatter) + "                                         " + tasks[position].time().toString()
 
 
         val drawable = GradientDrawable()
@@ -93,8 +93,8 @@ class BasketTasksAdapter(var tasks: List<Task>, var context: Context) : Recycler
             val intent = Intent(context, BasketTaskActivity::class.java)
 
             intent.putExtra("nameTask", tasks[position].name);
-            intent.putExtra("timeTask", tasks[position].time.toString());
-            intent.putExtra("dateTask", tasks[position].date.format(dateFormatter));
+            intent.putExtra("timeTask", tasks[position].time().toString());
+            intent.putExtra("dateTask", tasks[position].date().format(dateFormatter));
             intent.putExtra("noteTask", tasks[position].note)
             intent.putExtra("importanceTask", tasks[position].importance)
             intent.putExtra("urgencyTask", tasks[position].urgency)

@@ -223,7 +223,6 @@ class SecondActivity: BaseActivity() {
     }
 
     fun showReminderDialog(context: Context) {
-        // Опции по умолчанию
         val options = arrayOf("За 10 минут", "За 1 час", "За 1 день", "Выбрать своё время")
         val builder = android.app.AlertDialog.Builder(context)
 

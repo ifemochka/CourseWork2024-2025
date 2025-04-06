@@ -14,25 +14,29 @@ class Calendar : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_calendar)
+        saveData(this)
         startCheckingTime();
 
         val list: ImageView = findViewById(R.id.list)
 
         ResetCalendar()
         list.setOnClickListener{
+            saveData(this)
             val intentToCalendar = Intent(this, MainActivity::class.java)
             startActivity(intentToCalendar)
+            saveData(this)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        saveData(this)
         ResetCalendar()
     }
 
     override fun onResume(){
         super.onResume()
+        saveData(this)
         ResetCalendar()
     }
 
@@ -41,7 +45,8 @@ class Calendar : BaseActivity() {
         Data.taskId.clear()
         var calendar : List<Pair<String, MutableList<Task>>> = List(356) { Pair("", mutableListOf()) }
         for(task in Data.tasks){
-            val index = task.date.dayOfYear - 1
+            val index = task.date().dayOfYear - 1
+           // var color: Int = 0xD6D75555.toInt()
             var color: Int = Data.taskColorMap[task]!!
             if (task.importance == true){
                 color = Color.parseColor("#FFCCCB")
@@ -65,11 +70,13 @@ class Calendar : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        saveData(this)
         handler.removeCallbacksAndMessages(null)
     }
 
     override fun onStop() {
         super.onStop()
+        saveData(this)
         handler.removeCallbacksAndMessages(null)
     }
 }

@@ -28,7 +28,7 @@ class DayActivity : BaseActivity() {
         IfEmpty = findViewById(R.id.empty_label)
         title.text = "Список задач на ${LocalDate.ofYearDay(2025, Data.selectedDay).format(dateFormatter)}"
 
-        val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+        val orant = Data.tasks.filter { it.date() == LocalDate.ofYearDay(2025, Data.selectedDay) }
 
         if(orant.size != 0){
             IfEmpty.text = "";
@@ -40,7 +40,7 @@ class DayActivity : BaseActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val orant = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+        val orant = Data.tasks.filter { it.date() == LocalDate.ofYearDay(2025, Data.selectedDay) }
 
         if(orant.size != 0){
             IfEmpty.text = "";
@@ -52,7 +52,7 @@ class DayActivity : BaseActivity() {
 
     override fun onResume(){
         super.onResume()
-        val dayTasks = Data.tasks.filter { it.date == LocalDate.ofYearDay(2025, Data.selectedDay) }
+        val dayTasks = Data.tasks.filter { it.date() == LocalDate.ofYearDay(2025, Data.selectedDay) }
 
         if(dayTasks.size != 0){
             IfEmpty.text = "";

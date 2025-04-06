@@ -21,6 +21,8 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        //clearSharedPreferences(this)
+        loadData(this)
 
         startCheckingTime();
 
@@ -86,6 +88,7 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         startCheckingTime();
+        saveData(this)
 
         Data.currentTasks = Data.tasks
 
@@ -98,7 +101,9 @@ class MainActivity : BaseActivity() {
 
     override fun onResume(){
         super.onResume()
+
         startCheckingTime();
+        saveData(this)
         Data.currentTasks = Data.tasks
         Data.currentTasks = Data.currentTasks
         if(Data.tasks.size != 0){
@@ -115,11 +120,13 @@ class MainActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        saveData(this)
     }
 
     override fun onStop() {
         super.onStop()
         handler.removeCallbacksAndMessages(null)
+        saveData(this)
     }
 
     fun Reset(){
@@ -138,17 +145,17 @@ class MainActivity : BaseActivity() {
         Data.currentTasks = Data.tasks
         tasksList.layoutManager = LinearLayoutManager(this)
         if (option == sortOptions[0]){
-            Data.currentTasks = ArrayList(Data.currentTasks.sortedWith(compareBy({ it.date }, { it.time })) )
+            Data.currentTasks = ArrayList(Data.currentTasks.sortedWith(compareBy({ it.date() }, { it.time() })) )
             tasksList.adapter = TasksAdapter(Data.currentTasks ,this)
         }
         else if(option == sortOptions[1]){
-            Data.currentTasks = Data.currentTasks.sortedBy { it.importance }.reversed() as ArrayList<Task>
+            Data.currentTasks = ArrayList(Data.currentTasks.sortedBy { it.importance }.reversed() )
             tasksList.adapter = TasksAdapter(Data.currentTasks,this)
 
         }
         else if(option == sortOptions[2]){
             Data.currentTasks =
-                Data.currentTasks.sortedBy { it.urgency }.reversed() as ArrayList<Task>
+                ArrayList( Data.currentTasks.sortedBy { it.urgency }.reversed())
             tasksList.adapter = TasksAdapter(Data.currentTasks,this)
 
         }
@@ -167,7 +174,7 @@ class MainActivity : BaseActivity() {
         val currentTime = LocalTime.now()
 
         return tasks.filter { task ->
-            task.date > currentDate || (task.date == currentDate && task.time > currentTime.minusMinutes(1) )
+            task.date() > currentDate || (task.date() == currentDate && task.time() > currentTime.minusMinutes(1) )
         }
     }
 

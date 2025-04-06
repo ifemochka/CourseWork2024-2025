@@ -77,12 +77,12 @@ class TaskActivity : BaseActivity() {
 
         endButton.setOnClickListener{
 
-            val daysBetween = ChronoUnit.DAYS.between( LocalDate.of(2025, 3, 31), Data.currentTasks[position].date)
-            Toast.makeText(this, "$daysBetween", Toast.LENGTH_SHORT).show()
+            val daysBetween = ChronoUnit.DAYS.between( LocalDate.of(2025, 3, 31), Data.currentTasks[position].date())
 
             Data.tasksInWeeks[(daysBetween/7).toInt()]++;
 
             val intentToMain = Intent()
+            saveData(this)
 
             Data.basket.add(Data.currentTasks[position])
             Data.tasks.removeAt(Data.tasks.indexOf(Data.currentTasks[position]))
@@ -101,6 +101,7 @@ class TaskActivity : BaseActivity() {
             }
             else{
                 val intentToMain = Intent()
+                saveData(this)
                 val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.tasks[position].importance , Data.tasks[position].urgency, tag);
                 color = Data.taskColorMap[Data.currentTasks[position]]!!
                 val index = Data.tasks.indexOf(Data.currentTasks[position])
@@ -213,9 +214,9 @@ class TaskActivity : BaseActivity() {
         builder.setTitle("Задачу перенести на")
             .setItems(options) { _, which ->
                 when (which) {
-                    0 -> time.text = Data.currentTasks[position].time.plusHours(1).toString()
-                    1 -> date.text = Data.currentTasks[position].date.plusDays(1).format(dateFormatter)
-                    2 -> date.text = Data.currentTasks[position].date.plusDays(7).format(dateFormatter)
+                    0 -> time.text = Data.currentTasks[position].time().plusHours(1).toString()
+                    1 -> date.text = Data.currentTasks[position].date().plusDays(1).format(dateFormatter)
+                    2 -> date.text = Data.currentTasks[position].date().plusDays(7).format(dateFormatter)
                     3 -> showDatePickerDialog()
                 }
                 Data.moved++

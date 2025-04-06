@@ -61,7 +61,7 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                     maxLines = 1
                     ellipsize = TextUtils.TruncateAt.END
                     gravity = Gravity.CENTER
-                    val topMarginDp = 720 * (task.time.hour * 60 + task.time.minute - (Data.start.hour * 60)) / (Data.hoursInDay * 60)
+                    val topMarginDp = 720 * (task.time().hour * 60 + task.time().minute - (Data.start.hour * 60)) / (Data.hoursInDay * 60)
 
                     setPadding(4, 4, 4, 4)
                     background = GradientDrawable().apply {
@@ -135,7 +135,6 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                         RelativeLayout.LayoutParams.WRAP_CONTENT
                     ).apply {
                         topMargin = (i * (720/Data.hoursInDay) * resources.displayMetrics.density).toInt()
-                        leftMargin = 160
                     }
                 }
                 parent.addView(label)
@@ -154,8 +153,8 @@ class CalendarAdapter(private val items: List<Pair<String, List<Task>>>,  privat
                 val task = Data.taskId[view]!!
                 Data.currentTasks = arrayListOf<Task> (task)
                 intent.putExtra("nameTask", task.name);
-                intent.putExtra("timeTask", task.time.toString());
-                intent.putExtra("dateTask", task.date.format(dateFormatter));
+                intent.putExtra("timeTask", task.time().toString());
+                intent.putExtra("dateTask", task.date().format(dateFormatter));
                 intent.putExtra("noteTask", task.note)
                 intent.putExtra("importanceTask", task.importance)
                 intent.putExtra("urgencyTask", task.urgency)

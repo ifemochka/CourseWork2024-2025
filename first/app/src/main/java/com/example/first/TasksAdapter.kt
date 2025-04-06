@@ -65,7 +65,7 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
         }
 
         holder.taskTag.text = tasks[position].tag
-        holder.taskTime.text = tasks[position].date.format(dateFormatter) + "                                           " + tasks[position].time.toString()
+        holder.taskTime.text = tasks[position].date().format(dateFormatter) + "                                         " + tasks[position].time().toString()
 
         val currentDateTime = LocalDateTime.now()
         val currentTime = currentDateTime.toLocalTime()
@@ -76,7 +76,7 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
         Data.taskColorMap[tasks[position]]?.let { drawable.setColor(it) }
         holder.layout.background = drawable
 
-        if (tasks[position].date < currentDate || (tasks[position].date == currentDate && tasks[position].time <= currentTime.minusMinutes(1) )){
+        if (tasks[position].date() < currentDate || (tasks[position].date() == currentDate && tasks[position].time() <= currentTime.minusMinutes(1) )){
             val drawable = GradientDrawable()
             drawable.cornerRadius = 46f
             drawable.setColor(Color.parseColor("#D6E9E1E1"))
@@ -104,13 +104,12 @@ class TasksAdapter(var tasks: List<Task>, var context: Context) : RecyclerView.A
             }
         }
 
-
         holder.layout.setOnClickListener{
             val intent = Intent(context, TaskActivity::class.java)
 
             intent.putExtra("nameTask", tasks[position].name);
-            intent.putExtra("timeTask", tasks[position].time.toString());
-            intent.putExtra("dateTask", tasks[position].date.format(dateFormatter));
+            intent.putExtra("timeTask", tasks[position].time().toString());
+            intent.putExtra("dateTask", tasks[position].date().format(dateFormatter));
             intent.putExtra("noteTask", tasks[position].note)
             intent.putExtra("importanceTask", tasks[position].importance)
             intent.putExtra("urgencyTask", tasks[position].urgency)

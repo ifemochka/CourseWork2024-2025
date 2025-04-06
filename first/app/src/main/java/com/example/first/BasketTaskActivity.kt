@@ -92,12 +92,14 @@ class BasketTaskActivity : BaseActivity() {
             }
             else{
                 val task = Task(nameTask.toString(), LocalTime.parse(timeTask, timeFormatter), LocalDate.parse(dateTask, dateFormatter), noteTask.toString(), Data.basket[position].importance, Data.basket[position].urgency, tag);
+
+                Data.taskColorMap[task] = Data.taskColorMap[Data.basket[position]]!!
                 Data.basket[position] = task
 
+                val intentToMain = Intent()
+                setResult(Activity.RESULT_OK, intentToMain)
+                finish()
             }
-            val intentToMain = Intent()
-            setResult(Activity.RESULT_OK, intentToMain)
-            finish()
         }
 
         time.setOnClickListener{
